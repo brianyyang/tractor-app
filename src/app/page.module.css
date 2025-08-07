@@ -7,3 +7,15 @@
   padding: 0 10px;
   margin: 10px;
 }
+
+.titleContainer {
+  height: 25%;
+}
+
+.contentContainer {
+  height: 75%;
+}
+
+.title {
+  margin-top: 5rem;
+}
