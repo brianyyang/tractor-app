@@ -10,11 +10,11 @@ const selectStyles = {
     textAlign: 'left',
     paddingLeft: '12px',
     color: '#4c6ef5',
-    backgroundColor: 'rgba(76, 110, 245, .1)',
+    backgroundColor: 'rgb(23, 28, 41)',
     borderColor: '#4c6ef5',
   } as CSSProperties,
   dropdown: {
-    backgroundColor: 'rgba(76, 110, 245, .1)',
+    backgroundColor: 'rgb(23, 28, 41)',
     borderColor: '#4c6ef5',
   },
 };

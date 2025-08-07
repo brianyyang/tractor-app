@@ -45,7 +45,7 @@ export const NewGame = () => {
       <div style={{ marginLeft: '1rem' }}>
         <b>Starting Card</b>
       </div>
-      <Flex align="center">
+      <Flex align='center'>
         <StyledSelect
           className={styles.select}
           data={rankOptions}
@@ -78,8 +78,8 @@ export const NewGame = () => {
         w={246}
       />
       <Button
-        variant="light"
-        color="indigo"
+        variant='light'
+        color='indigo'
         w={246}
         style={{ marginLeft: '1rem', marginTop: '2rem' }}
       >
