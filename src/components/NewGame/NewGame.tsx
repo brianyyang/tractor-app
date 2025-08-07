@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Button, Flex, Stack } from '@mantine/core';
-import { IconChevronDown } from '@tabler/icons-react';
+import { IconPlayCard, IconUsersPlus } from '@tabler/icons-react';
 import { Rank, Suit } from '@/types/PlayingCard';
 import styles from './NewGame.module.css';
 import { StyledSelect } from '../StyledSelect';
@@ -31,7 +31,7 @@ const suitOptions = Object.values(Suit).map((suit) => {
   }
   return {
     value: suit,
-    label: `${suit} ${symbol} `,
+    label: `${suit} ${symbol}`,
   };
 });
 
@@ -42,44 +42,49 @@ export const NewGame = () => {
 
   return (
     <Stack>
-      <div style={{ marginLeft: '1rem' }}>
+      <Flex align="center" justify="space-between" style={{ margin: '0 1rem' }}>
         <b>Starting Card</b>
-      </div>
-      <Flex align='center'>
+        <IconPlayCard size={30} style={{ marginRight: '-5px' }} />
+      </Flex>
+      <Flex align="center">
         <StyledSelect
           className={styles.select}
+          classNames={{ option: styles.option }}
           data={rankOptions}
           value={startingRank ? startingRank : null}
           onChange={(value) => setStartingRank(value as Rank)}
-          rightSection={<IconChevronDown size={14} />}
           w={80}
           searchable
         />
         of
         <StyledSelect
           className={styles.select}
+          classNames={{ option: styles.option }}
           data={suitOptions}
           value={startingSuit}
           onChange={(value) => setStartingSuit(value as Suit)}
-          rightSection={<IconChevronDown size={14} />}
           w={120}
           searchable
         />
       </Flex>
-      <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
+      <Flex
+        align="center"
+        justify="space-between"
+        style={{ margin: '2rem 1rem 0 1rem' }}
+      >
         <b>Add Players</b>
-      </div>
+        <IconUsersPlus size={28} style={{ marginRight: '-4px' }} />
+      </Flex>
       <StyledMultiSelect
         className={styles.select}
         data={['Susan', 'Sisi', 'Renee', 'Raymond', 'Myra']}
         value={players}
         onChange={(value) => setPlayers(value)}
-        rightSection={<IconChevronDown size={14} />}
         w={246}
       />
       <Button
-        variant='light'
-        color='indigo'
+        variant="light"
+        color="indigo"
         w={246}
         style={{ marginLeft: '1rem', marginTop: '2rem' }}
       >

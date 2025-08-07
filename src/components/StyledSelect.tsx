@@ -28,7 +28,7 @@ export const StyledSelect = ({
       {...selectProps}
       style={styleOverrides}
       styles={selectStyles}
-      rightSection={<IconChevronDown size={14} />}
+      rightSection={<IconChevronDown size={16} />}
     />
   );
 };

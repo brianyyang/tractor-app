@@ -1,3 +1,11 @@
 .select {
   margin: 0 1rem;
 }
+
+.option {
+  padding-left: 12px;
+}
+
+.option:hover {
+  background-color: #b3c2ff;
+}
