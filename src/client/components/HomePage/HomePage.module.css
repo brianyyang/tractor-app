@@ -9,13 +9,18 @@
 }
 
 .titleContainer {
-  height: 25%;
+  height: 20%;
 }
 
 .contentContainer {
-  height: 75%;
+  height: 80%;
 }
 
 .title {
-  margin-top: 3rem;
+  margin-top: 2rem;
+  cursor: pointer;
+}
+
+.title:hover {
+  color: #5d7cf7;
 }

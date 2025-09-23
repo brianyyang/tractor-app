@@ -4,25 +4,25 @@ export type PlayingCard = {
 };
 
 export enum Suit {
-  SPADES = 'spades',
-  HEARTS = 'hearts',
-  CLUBS = 'clubs',
-  DIAMONDS = 'diamonds',
+  Spades = 'spades',
+  Hearts = 'hearts',
+  Clubs = 'clubs',
+  Diamonds = 'diamonds',
 }
 
 export enum Rank {
-  ACE = 'ace',
-  TWO = 'two',
-  THREE = 'three',
-  FOUR = 'four',
-  FIVE = 'five',
-  SIX = 'six',
-  SEVEN = 'seven',
-  EIGHT = 'eight',
-  NINE = 'nine',
-  TEN = 'ten',
-  JACK = 'jack',
-  QUEEN = 'queen',
-  KING = 'king',
-  JOKER = 'joker',
+  Ace = 'ace',
+  Two = 'two',
+  Three = 'three',
+  Four = 'four',
+  Five = 'five',
+  Six = 'six',
+  Seven = 'seven',
+  Eight = 'eight',
+  Nine = 'nine',
+  Ten = 'ten',
+  Jack = 'jack',
+  Queen = 'queen',
+  King = 'king',
+  Joker = 'joker',
 }

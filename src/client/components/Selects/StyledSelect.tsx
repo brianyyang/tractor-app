@@ -1,5 +1,6 @@
 import { CSSProperties, Select, SelectProps } from '@mantine/core';
 import { IconChevronDown } from '@tabler/icons-react';
+import styles from './Select.module.css';
 
 type StyledSelectProps = SelectProps & {
   styleOverrides?: CSSProperties;
@@ -25,10 +26,12 @@ export const StyledSelect = ({
 }: StyledSelectProps) => {
   return (
     <Select
-      {...selectProps}
+      className={styles.select}
+      classNames={{ option: styles.option }}
       style={styleOverrides}
       styles={selectStyles}
       rightSection={<IconChevronDown size={16} />}
+      {...selectProps}
     />
   );
 };
