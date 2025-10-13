@@ -36,7 +36,8 @@ const suitOptions = Object.values(Suit).map((suit) => {
 });
 
 export const NewGame = () => {
-  const { setGameState, setGameId, players, setPlayers } = useGame();
+  const { setGameState, setGameId, players, setPlayers, setRoundNumber } =
+    useGame();
   const [startingRank, setStartingRank] = useState<Rank | null>(null);
   const [startingSuit, setStartingSuit] = useState<Suit | null>(null);
 
@@ -84,6 +85,7 @@ export const NewGame = () => {
         style={{ marginLeft: '1rem', marginTop: '2rem' }}
         onClick={() => {
           setGameId(1);
+          setRoundNumber(1);
           setGameState(GameState.NewRound);
         }}
       >

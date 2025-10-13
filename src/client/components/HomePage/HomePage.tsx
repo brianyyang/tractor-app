@@ -7,7 +7,7 @@ import { NewRound } from '../NewRound/NewRound';
 import styles from './HomePage.module.css';
 
 export const HomePage = () => {
-  const { gameState, setGameState, gameId } = useGame();
+  const { gameState, setGameState, gameId, roundNumber } = useGame();
 
   const renderGameState = (gameState: GameState) => {
     switch (gameState) {
@@ -50,6 +50,11 @@ export const HomePage = () => {
         {gameId > 0 && (
           <Flex justify="center" mt="1rem">
             <b>{`Game ID: ${gameId}`}</b>
+            {roundNumber > 0 && (
+              <b
+                style={{ whiteSpace: 'pre' }}
+              >{`   |   Round #: ${roundNumber}`}</b>
+            )}
           </Flex>
         )}
       </div>

@@ -19,6 +19,7 @@
 .title {
   margin-top: 2rem;
   cursor: pointer;
+  text-align: center;
 }
 
 .title:hover {

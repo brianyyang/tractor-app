@@ -10,6 +10,7 @@ export const NewRound = () => {
   const { players } = useGame();
   const [winningTeam, setWinningTeam] = useState<string[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
+  const [dealer, setDealer] = useState<string>('');
 
   const otherTeam = useMemo(() => {
     return players.filter((player) => !winningTeam.includes(player));
@@ -17,7 +18,7 @@ export const NewRound = () => {
 
   return (
     <Stack>
-      <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
+      <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
         <b>Winning Team</b>
       </div>
       <StyledMultiSelect
@@ -26,15 +27,32 @@ export const NewRound = () => {
         onChange={(value) => setWinningTeam(value)}
         w={246}
       />
-      <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
+      <div
+        style={{
+          marginLeft: '1rem',
+          marginTop: '2rem',
+          display: 'flex',
+          justifyContent: 'space-between',
+          width: '307.5px',
+        }}
+      >
         <b>Points Scored</b>
+        <b>Dealer</b>
       </div>
-      <StyledSelect
-        data={['0', '1', '2', '3']}
-        value={pointsScored}
-        w={80}
-        onChange={(value) => setPointsScored(value || '0')}
-      />
+      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+        <StyledSelect
+          data={['0', '1', '2', '3']}
+          value={pointsScored}
+          w={80}
+          onChange={(value) => setPointsScored(value || '0')}
+        />
+        <StyledSelect
+          data={players}
+          value={dealer}
+          w={130}
+          onChange={(value) => setDealer(value || '')}
+        />
+      </div>
       <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
         <b>Other Team</b>
       </div>
