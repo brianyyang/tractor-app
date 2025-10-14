@@ -3,7 +3,7 @@
 import { useState } from 'react';
 import { Button, Flex, Stack } from '@mantine/core';
 import { IconPlayCard, IconUsersPlus } from '@tabler/icons-react';
-import { Rank, Suit } from '@/types/PlayingCard';
+import { Rank, Suit } from '@/types/playingCard';
 import { StyledSelect } from '../Selects/StyledSelect';
 import { StyledMultiSelect } from '../Selects/StyledMultiSelect';
 import { GameState, useGame } from '@/client/contexts/GameContext';
