@@ -5,6 +5,7 @@ import { useGame, GameState } from '@/client/contexts/GameContext';
 import { NewGame } from '../NewGame/NewGame';
 import { NewRound } from '../NewRound/NewRound';
 import styles from './HomePage.module.css';
+import { GameTable } from '../Tables/GameTable';
 
 export const HomePage = () => {
   const { gameState, setGameState, gameId, roundNumber } = useGame();
@@ -22,7 +23,12 @@ export const HomePage = () => {
             >
               New Game
             </Button>
-            <Button className={styles.button} variant="light" color="indigo">
+            <Button
+              className={styles.button}
+              variant="light"
+              color="indigo"
+              onClick={() => setGameState(GameState.GameHistory)}
+            >
               Past Games
             </Button>
           </>
@@ -33,6 +39,9 @@ export const HomePage = () => {
 
       case GameState.NewRound:
         return <NewRound />;
+
+      case GameState.GameHistory:
+        return <GameTable />;
 
       default:
     }

@@ -31,7 +31,7 @@ export default async function handler(
 
     default:
       // handle unsupported request methods
-      res.setHeader('Allow', ['GET', 'POST', 'PATCH']);
+      res.setHeader('Allow', ['GET']);
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

@@ -1,11 +1,13 @@
 'use client';
 
+import { Player } from '@/types/player';
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
 export enum GameState {
   Home = 'home',
   NewGame = 'new game',
   NewRound = 'new round',
+  GameHistory = 'game history',
 }
 
 interface GameContextType {
@@ -13,8 +15,8 @@ interface GameContextType {
   setGameState: (state: GameState) => void;
   gameId: number;
   setGameId: (id: number) => void;
-  players: string[];
-  setPlayers: (players: string[]) => void;
+  players: Player[];
+  setPlayers: (players: Player[]) => void;
   roundNumber: number;
   setRoundNumber: (round: number) => void;
 }
@@ -24,7 +26,7 @@ const GameContext = createContext<GameContextType | undefined>(undefined);
 export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [gameState, setGameState] = useState<GameState>(GameState.Home);
   const [gameId, setGameId] = useState<number>(0);
-  const [players, setPlayers] = useState<string[]>([]);
+  const [players, setPlayers] = useState<Player[]>([]);
   const [roundNumber, setRoundNumber] = useState<number>(0);
 
   return (

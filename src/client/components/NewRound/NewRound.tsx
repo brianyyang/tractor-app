@@ -5,16 +5,24 @@ import { Button, Stack } from '@mantine/core';
 import { useGame } from '@/client/contexts/GameContext';
 import { StyledMultiSelect } from '../Selects/StyledMultiSelect';
 import { StyledSelect } from '../Selects/StyledSelect';
+import { Player } from '@/types/player';
 
 export const NewRound = () => {
   const { players } = useGame();
-  const [winningTeam, setWinningTeam] = useState<string[]>([]);
+  const [winningTeam, setWinningTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
-  const [dealer, setDealer] = useState<string>('');
+  const [dealer, setDealer] = useState<Player>();
 
   const otherTeam = useMemo(() => {
     return players.filter((player) => !winningTeam.includes(player));
   }, [winningTeam]);
+
+  const handleWinningTeamChange = (values: string[]) => {
+    const selectedPlayers = players.filter((player) =>
+      values.includes(player.name)
+    );
+    setWinningTeam(selectedPlayers);
+  };
 
   return (
     <Stack>
@@ -22,9 +30,9 @@ export const NewRound = () => {
         <b>Winning Team</b>
       </div>
       <StyledMultiSelect
-        data={players}
-        value={winningTeam}
-        onChange={(value) => setWinningTeam(value)}
+        data={players.map((player) => player.name)}
+        value={winningTeam.map((player) => player.name)}
+        onChange={handleWinningTeamChange}
         w={246}
       />
       <div
@@ -47,16 +55,23 @@ export const NewRound = () => {
           onChange={(value) => setPointsScored(value || '0')}
         />
         <StyledSelect
-          data={players}
-          value={dealer}
+          data={players.map((player) => player.name)}
+          value={dealer ? dealer.name : ''}
           w={130}
-          onChange={(value) => setDealer(value || '')}
+          onChange={(value) =>
+            setDealer(players.find((player) => player.name === value))
+          }
         />
       </div>
       <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
         <b>Other Team</b>
       </div>
-      <StyledMultiSelect data={players} value={otherTeam} w={246} disabled />
+      <StyledMultiSelect
+        data={players.map((player) => player.name)}
+        value={otherTeam.map((player) => player.name)}
+        w={246}
+        disabled
+      />
       <Button
         variant="light"
         color="indigo"
