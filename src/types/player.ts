@@ -15,5 +15,5 @@ export const examplePlayers: Player[] = [
 ];
 
 export const fromIPlayer = (iPlayer: IPlayer) => {
-  return { id: iPlayer.id, name: iPlayer.name } as Player;
+  return { id: iPlayer._id, name: iPlayer.name } as Player;
 };

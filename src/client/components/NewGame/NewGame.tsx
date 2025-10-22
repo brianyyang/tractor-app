@@ -1,7 +1,7 @@
 'use client';
 
-import { CSSProperties, useEffect, useMemo, useState } from 'react';
-import { Button, Flex, Stack } from '@mantine/core';
+import { CSSProperties, useEffect, useState } from 'react';
+import { Button, Flex, Loader, Stack } from '@mantine/core';
 import { IconPlayCard, IconUsersPlus } from '@tabler/icons-react';
 import { Rank, Suit } from '@/types/playingCard';
 import { StyledSelect } from '../Selects/StyledSelect';
@@ -53,6 +53,7 @@ const areFieldsValid = (
 
 export const NewGame = () => {
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
+  const [dataLoading, setDataLoading] = useState<boolean>(true);
 
   useEffect(() => {
     const fetchPlayers = async () => {
@@ -65,7 +66,9 @@ export const NewGame = () => {
         setAvailablePlayers([]);
       }
     };
+
     fetchPlayers();
+    setDataLoading(false);
   }, []);
 
   const { setGameState, setGameId, players, setPlayers, setRoundNumber } =
@@ -102,7 +105,9 @@ export const NewGame = () => {
     }
   };
 
-  return (
+  return dataLoading ? (
+    <Loader />
+  ) : (
     <Stack>
       <Flex align="center" justify="space-between" style={{ margin: '0 1rem' }}>
         <b>Starting Card</b>

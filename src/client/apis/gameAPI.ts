@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Player } from '@/types/player';
-import { PlayingCard } from '@/types/playingCard';
+import { PlayingCard, playingCardToString } from '@/types/playingCard';
 import { GameData } from '@/pages/api/games';
 
 const API_URL = '/api/games';
@@ -11,8 +11,8 @@ export const createGame = async (
   startingCard: PlayingCard
 ) => {
   const gameData = {
-    players: players,
-    startingCard: startingCard,
+    players: players.map((player) => player.id),
+    startingCard: playingCardToString(startingCard),
   };
   try {
     const response = await axios.post(API_URL, gameData);

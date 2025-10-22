@@ -26,3 +26,15 @@ export enum Rank {
   King = 'king',
   Joker = 'joker',
 }
+
+export const playingCardToString = (card: PlayingCard) => {
+  return `${card.rank} of ${card.suit}`;
+};
+
+export const stringToPlayingCard = (str: String) => {
+  const words = str.split(' ');
+  return {
+    rank: words[0] as Rank,
+    suit: words[2] as Suit,
+  } as PlayingCard;
+};

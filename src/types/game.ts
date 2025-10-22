@@ -1,6 +1,6 @@
 import { IGame } from '@/server/models/Game';
 import { Player } from './player';
-import { PlayingCard } from './playingCard';
+import { PlayingCard, stringToPlayingCard } from './playingCard';
 
 export type Game = {
   gameId: number;
@@ -14,6 +14,6 @@ export const fromIGame = (iGame: IGame) => {
     gameId: iGame.gameId,
     date: iGame.date,
     players: iGame.players,
-    startingCard: iGame.startingCard,
+    startingCard: stringToPlayingCard(iGame.startingCard),
   } as Game;
 };
