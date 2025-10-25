@@ -4,29 +4,28 @@ import { Counter } from './Counter';
 import { IGame } from './Game';
 
 export interface IRound extends Document {
-  gameId: IGame['_id'];
+  gameId: IGame['gameId'];
   roundId: number;
-  winningTeam: IPlayer['_id'][];
-  otherTeam: IPlayer['_id'][];
+  winningTeam: IPlayer['name'][];
+  otherTeam: IPlayer['name'][];
   pointsScored: number;
-  dealer: IPlayer['_id'];
+  dealer: IPlayer['name'];
 }
 
 const RoundSchema = new Schema<IRound>({
-  gameId: { type: Schema.Types.ObjectId, ref: 'Game', required: true },
+  gameId: { type: Schema.Types.Number, ref: 'Game', required: true },
+  roundId: { type: Number },
   pointsScored: { type: Number, required: true },
-  winningTeam: [{ type: Schema.Types.ObjectId, ref: 'Player', required: true }],
-  otherTeam: [{ type: Schema.Types.ObjectId, ref: 'Player', required: true }],
-  dealer: { type: Schema.Types.ObjectId, ref: 'Player', required: true },
+  winningTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
+  otherTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
+  dealer: { type: Schema.Types.String, ref: 'Player', required: true },
 });
 
 // before saving a new Round, increment the counter and populate the round ID
 RoundSchema.pre<IRound>('save', async function (next) {
   if (this.isNew) {
-    const Game = mongoose.model('Game');
-    const game = await Game.findById(this.gameId).select('gameId');
     const counter = await Counter.findOneAndUpdate(
-      { name: `gameId${game.gameId}_roundId` },
+      { name: `gameId${this.gameId}_roundId` },
       { $inc: { seq: 1 } },
       { new: true, upsert: true }
     );

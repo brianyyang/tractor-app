@@ -1,17 +1,37 @@
 'use client';
 
-import { useMemo, useState } from 'react';
+import { CSSProperties, useMemo, useState } from 'react';
 import { Button, Stack } from '@mantine/core';
 import { useGame } from '@/client/contexts/GameContext';
 import { StyledMultiSelect } from '../Selects/StyledMultiSelect';
 import { StyledSelect } from '../Selects/StyledSelect';
 import { Player } from '@/types/player';
+import { createRound } from '@/client/apis/roundAPI';
+import { fromIRound } from '@/types/round';
+
+const areFieldsValid = (
+  winningTeam: Player[],
+  otherTeam: Player[],
+  pointsScored: string,
+  dealer: Player | undefined
+) => {
+  return !(
+    winningTeam.length === 0 ||
+    otherTeam.length === 0 ||
+    (pointsScored !== '0' &&
+      pointsScored !== '1' &&
+      pointsScored !== '2' &&
+      pointsScored !== '3') ||
+    dealer === undefined
+  );
+};
 
 export const NewRound = () => {
-  const { players } = useGame();
+  const { gameId, players, setRoundNumber } = useGame();
   const [winningTeam, setWinningTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
   const [dealer, setDealer] = useState<Player>();
+  const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
 
   const otherTeam = useMemo(() => {
     return players.filter((player) => !winningTeam.includes(player));
@@ -22,6 +42,45 @@ export const NewRound = () => {
       values.includes(player.name)
     );
     setWinningTeam(selectedPlayers);
+  };
+
+  const resetRoundFields = () => {
+    setWinningTeam([]);
+    setPointsScored('0');
+    setDealer(undefined);
+    setDealerKey((k) => k + 1);
+  };
+
+  const submitButtonStyles = {
+    marginLeft: '1rem',
+    marginTop: '2rem',
+    pointerEvents: !areFieldsValid(winningTeam, otherTeam, pointsScored, dealer)
+      ? 'none'
+      : undefined,
+    opacity: !areFieldsValid(winningTeam, otherTeam, pointsScored, dealer)
+      ? '0.8'
+      : '1',
+  } as CSSProperties;
+
+  const handleCreateRound = async () => {
+    try {
+      if (winningTeam.length > 0 && dealer) {
+        const roundData = await createRound(
+          gameId,
+          winningTeam,
+          otherTeam,
+          Number(pointsScored),
+          dealer
+        );
+        if (roundData.round) {
+          const createdRound = fromIRound(roundData.round);
+          setRoundNumber(createdRound.roundId + 1);
+          resetRoundFields();
+        }
+      }
+    } catch (err) {
+      console.error('Error creating round:', err);
+    }
   };
 
   return (
@@ -55,6 +114,7 @@ export const NewRound = () => {
           onChange={(value) => setPointsScored(value || '0')}
         />
         <StyledSelect
+          key={dealerKey}
           data={players.map((player) => player.name)}
           value={dealer ? dealer.name : ''}
           w={130}
@@ -76,8 +136,8 @@ export const NewRound = () => {
         variant="light"
         color="indigo"
         w={246}
-        style={{ marginLeft: '1rem', marginTop: '2rem' }}
-        onClick={() => {}}
+        style={submitButtonStyles}
+        onClick={handleCreateRound}
       >
         Add Round
       </Button>

@@ -19,6 +19,7 @@ interface GameContextType {
   setPlayers: (players: Player[]) => void;
   roundNumber: number;
   setRoundNumber: (round: number) => void;
+  clearGameState: () => void;
 }
 
 const GameContext = createContext<GameContextType | undefined>(undefined);
@@ -28,6 +29,12 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [gameId, setGameId] = useState<number>(0);
   const [players, setPlayers] = useState<Player[]>([]);
   const [roundNumber, setRoundNumber] = useState<number>(0);
+
+  const clearGameState = () => {
+    setGameId(0);
+    setPlayers([]);
+    setRoundNumber(0);
+  };
 
   return (
     <GameContext.Provider
@@ -40,6 +47,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setPlayers,
         roundNumber,
         setRoundNumber,
+        clearGameState,
       }}
     >
       {children}

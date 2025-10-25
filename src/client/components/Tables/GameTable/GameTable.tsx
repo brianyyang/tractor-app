@@ -4,8 +4,13 @@ import { useEffect, useState } from 'react';
 import { Table, Title, Loader, Center } from '@mantine/core';
 import { fromIGame, Game } from '@/types/game';
 import { getGamesPaginated } from '@/client/apis/gameAPI';
+import styles from '../Table.module.css';
 
-export const GameTable = () => {
+interface GameTableProps {
+  setRoundView: (gameId: number) => void;
+}
+
+export const GameTable = ({ setRoundView }: GameTableProps) => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -41,20 +46,26 @@ export const GameTable = () => {
       <Title order={2} mb="md" ta="center">
         Latest Games
       </Title>
-      <Table highlightOnHover>
+      <Table withColumnBorders className={styles.table}>
         <Table.Thead>
           <Table.Tr>
             <Table.Th>ID</Table.Th>
             <Table.Th>Date</Table.Th>
-            <Table.Th>Players</Table.Th>
+            <Table.Th># of Players</Table.Th>
             <Table.Th>Starting Card</Table.Th>
           </Table.Tr>
         </Table.Thead>
         <Table.Tbody>
           {games.map((game) => (
-            <Table.Tr key={game.gameId}>
-              <Table.Td>{game.date.toLocaleString()}</Table.Td>
-              <Table.Td>{game.players.join(', ')}</Table.Td>
+            <Table.Tr
+              key={game.gameId}
+              onClick={() => {
+                setRoundView(game.gameId);
+              }}
+            >
+              <Table.Td>{game.gameId}</Table.Td>
+              <Table.Td>{game.date.toLocaleString().split('T')[0]}</Table.Td>
+              <Table.Td>{game.players.length}</Table.Td>
               <Table.Td>{`${game.startingCard.rank} of ${game.startingCard.suit}`}</Table.Td>
             </Table.Tr>
           ))}

@@ -1,14 +1,12 @@
-import { Game } from './game';
-import { Player } from './player';
 import { IRound } from '@/server/models/Round';
 
 export type Round = {
-  gameId: Game;
+  gameId: number;
   roundId: number;
-  winningTeam: Player[];
-  otherTeam: Player[];
+  winningTeam: string[];
+  otherTeam: string[];
   pointsScored: number;
-  dealer: Player;
+  dealer: string;
 };
 
 export const fromIRound = (iRound: IRound) => {

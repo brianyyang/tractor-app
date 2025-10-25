@@ -6,14 +6,14 @@ export interface IGame extends Document {
   gameId: number;
   startingCard: string;
   date: Date;
-  players: IPlayer['_id'][];
+  players: IPlayer['name'][];
 }
 
 const GameSchema = new Schema<IGame>({
   gameId: { type: Number, unique: true },
   startingCard: { type: String },
   date: { type: Date, default: Date.now },
-  players: [{ type: Schema.Types.ObjectId, ref: 'Player', required: true }],
+  players: [{ type: Schema.Types.String, ref: 'Player', required: true }],
 });
 
 // before saving a new Game, increment the counter and populate the game ID

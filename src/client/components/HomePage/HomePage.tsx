@@ -5,10 +5,12 @@ import { useGame, GameState } from '@/client/contexts/GameContext';
 import { NewGame } from '../NewGame/NewGame';
 import { NewRound } from '../NewRound/NewRound';
 import styles from './HomePage.module.css';
-import { GameTable } from '../Tables/GameTable';
+import { GameTable } from '../Tables/GameTable/GameTable';
+import { GameHistory } from '../GameHistory';
 
 export const HomePage = () => {
-  const { gameState, setGameState, gameId, roundNumber } = useGame();
+  const { gameState, setGameState, gameId, roundNumber, clearGameState } =
+    useGame();
 
   const renderGameState = (gameState: GameState) => {
     switch (gameState) {
@@ -41,7 +43,7 @@ export const HomePage = () => {
         return <NewRound />;
 
       case GameState.GameHistory:
-        return <GameTable />;
+        return <GameHistory />;
 
       default:
     }
@@ -52,7 +54,10 @@ export const HomePage = () => {
       <div className={styles.titleContainer}>
         <Title
           className={styles.title}
-          onClick={() => setGameState(GameState.Home)}
+          onClick={() => {
+            clearGameState();
+            setGameState(GameState.Home);
+          }}
         >
           Tractor
         </Title>

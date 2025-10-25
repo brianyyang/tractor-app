@@ -1,11 +1,10 @@
 import { IGame } from '@/server/models/Game';
-import { Player } from './player';
 import { PlayingCard, stringToPlayingCard } from './playingCard';
 
 export type Game = {
   gameId: number;
   date: Date;
-  players: Player[];
+  players: string[];
   startingCard: PlayingCard;
 };
 

@@ -11,7 +11,7 @@ export const createGame = async (
   startingCard: PlayingCard
 ) => {
   const gameData = {
-    players: players.map((player) => player.id),
+    players: players.map((player) => player.name),
     startingCard: playingCardToString(startingCard),
   };
   try {

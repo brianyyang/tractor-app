@@ -11,6 +11,7 @@ import { createGame } from '@/client/apis/gameAPI';
 import { fromIPlayer, Player } from '@/types/player';
 import { getAllPlayers } from '@/client/apis/playerAPI';
 import { PlayerData } from '@/pages/api/players';
+import { fromIGame } from '@/types/game';
 
 const rankOptions = Object.values(Rank).map((rank) => ({
   value: rank,
@@ -95,10 +96,16 @@ export const NewGame = () => {
   const handleCreateGame = async () => {
     try {
       if (startingRank !== null && startingSuit !== null) {
-        await createGame(players, {
+        const gameData = await createGame(players, {
           rank: startingRank,
           suit: startingSuit,
         });
+        if (gameData.game) {
+          const createdGame = fromIGame(gameData.game);
+          setGameId(createdGame.gameId);
+          setRoundNumber(1);
+          setGameState(GameState.NewRound);
+        }
       }
     } catch (err) {
       console.error('Error creating game:', err);
@@ -151,9 +158,6 @@ export const NewGame = () => {
         style={submitButtonStyles}
         onClick={() => {
           handleCreateGame();
-          setGameId(1);
-          setRoundNumber(1);
-          setGameState(GameState.NewRound);
         }}
       >
         Start Game
