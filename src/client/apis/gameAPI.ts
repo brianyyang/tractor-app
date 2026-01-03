@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { Player } from '@/types/player';
-import { PlayingCard, playingCardToString } from '@/types/playingCard';
+import { PlayingCard, playingCardToString } from '@/types/PlayingCard';
 import { GameData } from '@/pages/api/games';
 
 const API_URL = '/api/games';

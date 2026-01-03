@@ -3,7 +3,7 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { Button, Flex, Loader, Stack } from '@mantine/core';
 import { IconPlayCard, IconUsersPlus } from '@tabler/icons-react';
-import { Rank, Suit } from '@/types/playingCard';
+import { Rank, Suit } from '@/types/PlayingCard';
 import { StyledSelect } from '../Selects/StyledSelect';
 import { StyledMultiSelect } from '../Selects/StyledMultiSelect';
 import { GameState, useGame } from '@/client/contexts/GameContext';
@@ -116,11 +116,11 @@ export const NewGame = () => {
     <Loader />
   ) : (
     <Stack>
-      <Flex align="center" justify="space-between" style={{ margin: '0 1rem' }}>
+      <Flex align='center' justify='space-between' style={{ margin: '0 1rem' }}>
         <b>Starting Card</b>
         <IconPlayCard size={30} style={{ marginRight: '-5px' }} />
       </Flex>
-      <Flex align="center">
+      <Flex align='center'>
         <StyledSelect
           data={rankOptions}
           value={startingRank ? startingRank : null}
@@ -138,8 +138,8 @@ export const NewGame = () => {
         />
       </Flex>
       <Flex
-        align="center"
-        justify="space-between"
+        align='center'
+        justify='space-between'
         style={{ margin: '2rem 1rem 0 1rem' }}
       >
         <b>Add Players</b>
@@ -152,8 +152,8 @@ export const NewGame = () => {
         w={246}
       />
       <Button
-        variant="light"
-        color="indigo"
+        variant='light'
+        color='indigo'
         w={246}
         style={submitButtonStyles}
         onClick={() => {

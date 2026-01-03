@@ -1,5 +1,5 @@
 import { IGame } from '@/server/models/Game';
-import { PlayingCard, stringToPlayingCard } from './playingCard';
+import { PlayingCard, stringToPlayingCard } from './PlayingCard';
 
 export type Game = {
   gameId: number;
