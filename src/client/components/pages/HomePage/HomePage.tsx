@@ -5,8 +5,8 @@ import { useGame, GameState } from '@/client/contexts/GameContext';
 import { NewGame } from '../NewGame/NewGame';
 import { NewRound } from '../NewRound/NewRound';
 import styles from './HomePage.module.css';
-import { GameTable } from '../Tables/GameTable/GameTable';
-import { GameHistory } from '../GameHistory';
+import { GameHistory } from '../../GameHistory';
+import { AddPlayers } from '../AddPlayers/AddPlayers';
 
 export const HomePage = () => {
   const { gameState, setGameState, gameId, roundNumber, clearGameState } =
@@ -16,24 +16,35 @@ export const HomePage = () => {
     switch (gameState) {
       case GameState.Home:
         return (
-          <>
+          <Stack align='center'>
+            <div>
+              <Button
+                className={styles.button}
+                variant='light'
+                color='indigo'
+                onClick={() => setGameState(GameState.NewGame)}
+              >
+                New Game
+              </Button>
+              <Button
+                className={styles.button}
+                variant='light'
+                color='indigo'
+                onClick={() => setGameState(GameState.GameHistory)}
+              >
+                Past Games
+              </Button>
+            </div>
             <Button
               className={styles.button}
-              variant="light"
-              color="indigo"
-              onClick={() => setGameState(GameState.NewGame)}
+              style={{ width: '50%' }}
+              variant='light'
+              color='indigo'
+              onClick={() => setGameState(GameState.AddPlayers)}
             >
-              New Game
+              Add Players
             </Button>
-            <Button
-              className={styles.button}
-              variant="light"
-              color="indigo"
-              onClick={() => setGameState(GameState.GameHistory)}
-            >
-              Past Games
-            </Button>
-          </>
+          </Stack>
         );
 
       case GameState.NewGame:
@@ -45,12 +56,15 @@ export const HomePage = () => {
       case GameState.GameHistory:
         return <GameHistory />;
 
+      case GameState.AddPlayers:
+        return <AddPlayers />;
+
       default:
     }
   };
 
   return (
-    <Stack align="center" justify="center" className={styles.pageContainer}>
+    <Stack align='center' justify='center' className={styles.pageContainer}>
       <div className={styles.titleContainer}>
         <Title
           className={styles.title}
@@ -62,7 +76,7 @@ export const HomePage = () => {
           Tractor
         </Title>
         {gameId > 0 && (
-          <Flex justify="center" mt="1rem">
+          <Flex justify='center' mt='1rem'>
             <b>{`Game ID: ${gameId}`}</b>
             {roundNumber > 0 && (
               <b
@@ -73,8 +87,8 @@ export const HomePage = () => {
         )}
       </div>
       <Flex
-        justify="center"
-        align="flex-start"
+        justify='center'
+        align='flex-start'
         className={styles.contentContainer}
       >
         {renderGameState(gameState)}

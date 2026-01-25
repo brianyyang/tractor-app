@@ -1,19 +1,20 @@
 'use client';
 
-import { CSSProperties, useMemo, useState } from 'react';
-import { Button, Stack } from '@mantine/core';
+import { CSSProperties, useEffect, useMemo, useState } from 'react';
+import { Button, Center, Loader, Stack } from '@mantine/core';
 import { useGame } from '@/client/contexts/GameContext';
-import { StyledMultiSelect } from '../Selects/StyledMultiSelect';
-import { StyledSelect } from '../Selects/StyledSelect';
+import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
+import { StyledSelect } from '../../Selects/StyledSelect';
 import { Player } from '@/types/player';
-import { createRound } from '@/client/apis/roundAPI';
-import { fromIRound } from '@/types/round';
+import { createRound, getAllRoundsByID } from '@/client/apis/roundAPI';
+import { fromIRound, Round } from '@/types/round';
+import { PlayerRoundTable } from '../../Tables/PlayerRoundTable/PlayerRoundTable';
 
 const areFieldsValid = (
   winningTeam: Player[],
   otherTeam: Player[],
   pointsScored: string,
-  dealer: Player | undefined
+  dealer: Player | undefined,
 ) => {
   return !(
     winningTeam.length === 0 ||
@@ -27,11 +28,25 @@ const areFieldsValid = (
 };
 
 export const NewRound = () => {
-  const { gameId, players, setRoundNumber } = useGame();
+  const { gameId, players, roundNumber, setRoundNumber, startingRank } =
+    useGame();
   const [winningTeam, setWinningTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
   const [dealer, setDealer] = useState<Player>();
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
+
+  const [rounds, setRounds] = useState<Round[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllRoundsByID(gameId)
+      .then((data) => {
+        if (data.rounds) {
+          setRounds(data.rounds.map((iRound) => fromIRound(iRound)));
+        }
+      })
+      .finally(() => setLoading(false));
+  }, [gameId, roundNumber]);
 
   const otherTeam = useMemo(() => {
     return players.filter((player) => !winningTeam.includes(player));
@@ -39,7 +54,7 @@ export const NewRound = () => {
 
   const handleWinningTeamChange = (values: string[]) => {
     const selectedPlayers = players.filter((player) =>
-      values.includes(player.name)
+      values.includes(player.name),
     );
     setWinningTeam(selectedPlayers);
   };
@@ -70,7 +85,7 @@ export const NewRound = () => {
           winningTeam,
           otherTeam,
           Number(pointsScored),
-          dealer
+          dealer,
         );
         if (roundData.round) {
           const createdRound = fromIRound(roundData.round);
@@ -85,6 +100,14 @@ export const NewRound = () => {
 
   return (
     <Stack>
+      {roundNumber !== 1 &&
+        (loading ? (
+          <Center mt='xl'>
+            <Loader />
+          </Center>
+        ) : (
+          <PlayerRoundTable pastRounds={rounds} startingRank={startingRank} />
+        ))}
       <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
         <b>Winning Team</b>
       </div>
@@ -133,8 +156,8 @@ export const NewRound = () => {
         disabled
       />
       <Button
-        variant="light"
-        color="indigo"
+        variant='light'
+        color='indigo'
         w={246}
         style={submitButtonStyles}
         onClick={handleCreateRound}

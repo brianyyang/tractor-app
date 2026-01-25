@@ -8,6 +8,7 @@ export enum GameState {
   NewGame = 'new game',
   NewRound = 'new round',
   GameHistory = 'game history',
+  AddPlayers = 'add players',
 }
 
 interface GameContextType {
@@ -17,6 +18,8 @@ interface GameContextType {
   setGameId: (id: number) => void;
   players: Player[];
   setPlayers: (players: Player[]) => void;
+  startingRank: number;
+  setStartingRank: (rank: number) => void;
   roundNumber: number;
   setRoundNumber: (round: number) => void;
   clearGameState: () => void;
@@ -29,6 +32,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [gameId, setGameId] = useState<number>(0);
   const [players, setPlayers] = useState<Player[]>([]);
   const [roundNumber, setRoundNumber] = useState<number>(0);
+  const [startingRank, setStartingRank] = useState<number>(0);
 
   const clearGameState = () => {
     setGameId(0);
@@ -45,6 +49,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setGameId,
         players,
         setPlayers,
+        startingRank,
+        setStartingRank,
         roundNumber,
         setRoundNumber,
         clearGameState,

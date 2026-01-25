@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import { Table, Title, Loader, Center } from '@mantine/core';
-import { fromIGame, Game } from '@/types/game';
 import styles from '../Table.module.css';
 import { getAllRoundsByID } from '@/client/apis/roundAPI';
 import { fromIRound, Round } from '@/types/round';
@@ -27,7 +26,7 @@ export const RoundTable = ({ gameId }: RoundTableProps) => {
 
   if (loading) {
     return (
-      <Center mt="xl">
+      <Center mt='xl'>
         <Loader />
       </Center>
     );
@@ -35,7 +34,7 @@ export const RoundTable = ({ gameId }: RoundTableProps) => {
 
   if (rounds.length === 0) {
     return (
-      <Title order={3} mb="md" ta="center">
+      <Title order={3} mb='md' ta='center'>
         No rounds found.
       </Title>
     );
@@ -43,7 +42,7 @@ export const RoundTable = ({ gameId }: RoundTableProps) => {
 
   return (
     <div>
-      <Title order={2} mb="md" ta="center">
+      <Title order={2} mb='md' ta='center'>
         Rounds for Game ID: {gameId}
       </Title>
       <Table withColumnBorders className={styles.table}>

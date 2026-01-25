@@ -10,7 +10,7 @@ export type RoundData = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<RoundData>
+  res: NextApiResponse<RoundData>,
 ) {
   await connectToDatabase();
   const gameId = req.query.gameId;
@@ -19,7 +19,12 @@ export default async function handler(
     case 'POST': // create a new round
       const { winningTeam, otherTeam, pointsScored, dealer } = req.body;
 
-      if (!winningTeam || !otherTeam || !pointsScored || !dealer) {
+      if (
+        !winningTeam ||
+        !otherTeam ||
+        (pointsScored !== 0 && !pointsScored) ||
+        !dealer
+      ) {
         return res.status(400).json({ message: 'Missing required fields' });
       }
 
@@ -45,7 +50,7 @@ export default async function handler(
     case 'GET': // get all rounds for a game
       try {
         const foundRounds = await Round.find({ gameId: gameId }).sort({
-          roundId: -1,
+          roundId: 1,
         });
         return res.status(200).json({ rounds: foundRounds });
       } catch (error: any) {

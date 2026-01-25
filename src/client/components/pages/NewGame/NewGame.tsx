@@ -3,9 +3,9 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { Button, Flex, Loader, Stack } from '@mantine/core';
 import { IconPlayCard, IconUsersPlus } from '@tabler/icons-react';
-import { Rank, Suit } from '@/types/PlayingCard';
-import { StyledSelect } from '../Selects/StyledSelect';
-import { StyledMultiSelect } from '../Selects/StyledMultiSelect';
+import { Rank, rankToNumberValue, Suit } from '@/types/PlayingCard';
+import { StyledSelect } from '../../Selects/StyledSelect';
+import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
 import { GameState, useGame } from '@/client/contexts/GameContext';
 import { createGame } from '@/client/apis/gameAPI';
 import { fromIPlayer, Player } from '@/types/player';
@@ -43,7 +43,7 @@ const suitOptions = Object.values(Suit).map((suit) => {
 const areFieldsValid = (
   startingRank: Rank | null,
   startingSuit: Suit | null,
-  players: Player[]
+  players: Player[],
 ) => {
   return !(
     startingRank === null ||
@@ -61,7 +61,7 @@ export const NewGame = () => {
       const response: PlayerData = await getAllPlayers();
       if (response.players) {
         setAvailablePlayers(
-          response.players.map((iPlayer) => fromIPlayer(iPlayer))
+          response.players.map((iPlayer) => fromIPlayer(iPlayer)),
         );
       } else {
         setAvailablePlayers([]);
@@ -72,9 +72,15 @@ export const NewGame = () => {
     setDataLoading(false);
   }, []);
 
-  const { setGameState, setGameId, players, setPlayers, setRoundNumber } =
-    useGame();
-  const [startingRank, setStartingRank] = useState<Rank | null>(null);
+  const {
+    setGameState,
+    setGameId,
+    players,
+    setPlayers,
+    setStartingRank,
+    setRoundNumber,
+  } = useGame();
+  const [startingRank, setNewStartingRank] = useState<Rank | null>(null);
   const [startingSuit, setStartingSuit] = useState<Suit | null>(null);
 
   const submitButtonStyles = {
@@ -88,7 +94,7 @@ export const NewGame = () => {
 
   const handlePlayerChange = (values: string[]) => {
     const selectedPlayers = availablePlayers.filter((player) =>
-      values.includes(player.name)
+      values.includes(player.name),
     );
     setPlayers(selectedPlayers);
   };
@@ -105,6 +111,7 @@ export const NewGame = () => {
           setGameId(createdGame.gameId);
           setRoundNumber(1);
           setGameState(GameState.NewRound);
+          setStartingRank(rankToNumberValue(startingRank));
         }
       }
     } catch (err) {
@@ -124,7 +131,7 @@ export const NewGame = () => {
         <StyledSelect
           data={rankOptions}
           value={startingRank ? startingRank : null}
-          onChange={(value) => setStartingRank(value as Rank)}
+          onChange={(value) => setNewStartingRank(value as Rank)}
           w={80}
           searchable
         />

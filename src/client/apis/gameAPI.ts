@@ -8,7 +8,7 @@ const API_URL = '/api/games';
 // create a game
 export const createGame = async (
   players: Player[],
-  startingCard: PlayingCard
+  startingCard: PlayingCard,
 ) => {
   const gameData = {
     players: players.map((player) => player.name),
@@ -42,7 +42,7 @@ export const getGamesPaginated = async (pageNumber: number) => {
     return data;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || 'Failed to retrieve games'
+      error.response?.data?.message || 'Failed to retrieve games',
     );
   }
 };

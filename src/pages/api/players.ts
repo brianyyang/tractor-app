@@ -11,7 +11,7 @@ export type PlayerData = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<PlayerData>
+  res: NextApiResponse<PlayerData>,
 ) {
   await connectToDatabase();
 
@@ -25,12 +25,20 @@ export default async function handler(
       }
 
     case 'POST': // create new player
+      const { playerName } = req.body;
       try {
-        const player = new Player(req.body);
-        await player.save();
-        return res.status(201).json({ player });
-      } catch (error) {
-        return res.status(400).json({ error: 'Failed to create player' });
+        const player = new Player({ name: playerName });
+        const savedPlayer = await player.save();
+        return res.status(201).json({ player: savedPlayer });
+      } catch (error: any) {
+        if (error.code === 11000) {
+          return res.status(409).json({
+            error: `Player: ${playerName} already exists. Please try again.`,
+          });
+        }
+        return res
+          .status(400)
+          .json({ error: 'Failed to create player: please notify Brian.' });
       }
     default:
       // handle unsupported request methods
