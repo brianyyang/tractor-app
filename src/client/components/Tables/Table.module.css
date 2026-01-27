@@ -5,3 +5,8 @@
 .table th {
   padding: 0.5rem;
 }
+
+.gameRow:hover {
+  background-color: #3a3a3a;
+  cursor: pointer;
+}

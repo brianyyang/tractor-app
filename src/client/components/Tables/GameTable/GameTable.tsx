@@ -7,10 +7,10 @@ import { getGamesPaginated } from '@/client/apis/gameAPI';
 import styles from '../Table.module.css';
 
 interface GameTableProps {
-  setRoundView: (gameId: number) => void;
+  onGameClick: (gameId: number) => void;
 }
 
-export const GameTable = ({ setRoundView }: GameTableProps) => {
+export const GameTable = ({ onGameClick }: GameTableProps) => {
   const [games, setGames] = useState<Game[]>([]);
   const [loading, setLoading] = useState(true);
   const [pageNumber, setPageNumber] = useState<number>(1);
@@ -27,7 +27,7 @@ export const GameTable = ({ setRoundView }: GameTableProps) => {
 
   if (loading) {
     return (
-      <Center mt="xl">
+      <Center mt='xl'>
         <Loader />
       </Center>
     );
@@ -35,7 +35,7 @@ export const GameTable = ({ setRoundView }: GameTableProps) => {
 
   if (games.length === 0) {
     return (
-      <Title order={3} mb="md" ta="center">
+      <Title order={3} mb='md' ta='center'>
         No recent games found.
       </Title>
     );
@@ -43,7 +43,7 @@ export const GameTable = ({ setRoundView }: GameTableProps) => {
 
   return (
     <div>
-      <Title order={2} mb="md" ta="center">
+      <Title order={2} mb='md' ta='center'>
         Latest Games
       </Title>
       <Table withColumnBorders className={styles.table}>
@@ -59,8 +59,9 @@ export const GameTable = ({ setRoundView }: GameTableProps) => {
           {games.map((game) => (
             <Table.Tr
               key={game.gameId}
+              className={styles.gameRow}
               onClick={() => {
-                setRoundView(game.gameId);
+                onGameClick(game.gameId);
               }}
             >
               <Table.Td>{game.gameId}</Table.Td>

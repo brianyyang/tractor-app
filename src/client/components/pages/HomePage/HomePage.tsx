@@ -5,8 +5,9 @@ import { useGame, GameState } from '@/client/contexts/GameContext';
 import { NewGame } from '../NewGame/NewGame';
 import { NewRound } from '../NewRound/NewRound';
 import styles from './HomePage.module.css';
-import { GameHistory } from '../../GameHistory';
+import { GameHistory } from '../GameHistory/GameHistory';
 import { AddPlayers } from '../AddPlayers/AddPlayers';
+import { ResumeGame } from '../ResumeGame/ResumeGame';
 
 export const HomePage = () => {
   const { gameState, setGameState, gameId, roundNumber, clearGameState } =
@@ -30,11 +31,20 @@ export const HomePage = () => {
                 className={styles.button}
                 variant='light'
                 color='indigo'
-                onClick={() => setGameState(GameState.GameHistory)}
+                onClick={() => setGameState(GameState.ResumeGame)}
               >
-                Past Games
+                Resume Game
               </Button>
             </div>
+            <Button
+              className={styles.button}
+              style={{ width: '50%' }}
+              variant='light'
+              color='indigo'
+              onClick={() => setGameState(GameState.GameHistory)}
+            >
+              Past Games
+            </Button>
             <Button
               className={styles.button}
               style={{ width: '50%' }}
@@ -59,7 +69,11 @@ export const HomePage = () => {
       case GameState.AddPlayers:
         return <AddPlayers />;
 
+      case GameState.ResumeGame:
+        return <ResumeGame />;
+
       default:
+        return <Title>This page is unimplemented</Title>;
     }
   };
 

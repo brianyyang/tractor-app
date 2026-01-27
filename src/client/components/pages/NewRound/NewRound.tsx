@@ -159,6 +159,7 @@ export const NewRound = () => {
         variant='light'
         color='indigo'
         w={246}
+        mb={'2rem'}
         style={submitButtonStyles}
         onClick={handleCreateRound}
       >

@@ -9,6 +9,7 @@ export enum GameState {
   NewRound = 'new round',
   GameHistory = 'game history',
   AddPlayers = 'add players',
+  ResumeGame = 'resume game',
 }
 
 interface GameContextType {

@@ -67,7 +67,6 @@ export const PlayerRoundTable = ({
   pastRounds,
   startingRank,
 }: PlayerRoundTableProps) => {
-  console.log(pastRounds);
   const { players } = useGame();
   const playerRows = useMemo(() => {
     return createPlayerRows(pastRounds, players, startingRank);
