@@ -22,6 +22,7 @@ const createPlayerRows = (
 
   const rows = pastRounds.map((round) => (
     <Table.Tr key={round.roundId}>
+      <Table.Td>{round.roundId}</Table.Td>
       {players.map((player) => (
         <Table.Td key={`${player.name}RoundScore`}>
           {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
@@ -77,6 +78,7 @@ export const PlayerRoundTable = ({
       <Table withColumnBorders className={styles.table}>
         <Table.Thead>
           <Table.Tr>
+            <Table.Th>Round #</Table.Th>
             {players.map((player) => (
               <Table.Th key={player.id}>{player.name}</Table.Th>
             ))}
