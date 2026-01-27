@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties, useState } from 'react';
 import { Button, Flex, Stack, Title } from '@mantine/core';
 import { IconUsersPlus } from '@tabler/icons-react';

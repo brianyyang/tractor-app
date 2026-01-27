@@ -31,7 +31,7 @@ export const playingCardToString = (card: PlayingCard) => {
   return `${card.rank} of ${card.suit}`;
 };
 
-export const stringToPlayingCard = (str: String) => {
+export const stringToPlayingCard = (str: string) => {
   const words = str.split(' ');
   return {
     rank: words[0] as Rank,

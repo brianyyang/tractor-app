@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '@/server/mongodb';
 import Player, { IPlayer } from '@/server/models/Player';

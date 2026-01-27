@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '@/server/mongodb';
 import Game, { IGame } from '@/server/models/Game';
@@ -11,7 +12,7 @@ export type GameData = {
 
 export default async function handler(
   req: NextApiRequest,
-  res: NextApiResponse<GameData>
+  res: NextApiResponse<GameData>,
 ) {
   await connectToDatabase();
 

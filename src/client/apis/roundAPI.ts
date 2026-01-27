@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import { RoundData } from '@/pages/api/games/[gameId]/rounds';
 import { Player } from '@/types/player';
@@ -10,7 +11,7 @@ export const createRound = async (
   winningTeam: Player[],
   otherTeam: Player[],
   pointsScored: number,
-  dealer: Player
+  dealer: Player,
 ) => {
   const roundBody = {
     winningTeam: winningTeam.map((player) => player.name),
@@ -35,7 +36,7 @@ export const getRoundByID = async (gameId: number, roundId: number) => {
     return data;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || 'Failed to retrieve round'
+      error.response?.data?.message || 'Failed to retrieve round',
     );
   }
 };
@@ -48,7 +49,7 @@ export const getAllRoundsByID = async (gameId: number) => {
     return data;
   } catch (error: any) {
     throw new Error(
-      error.response?.data?.message || 'Failed to retrieve games'
+      error.response?.data?.message || 'Failed to retrieve games',
     );
   }
 };

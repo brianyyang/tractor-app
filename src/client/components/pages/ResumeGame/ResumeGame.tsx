@@ -1,5 +1,6 @@
 'use client';
 
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { CSSProperties, useEffect, useState } from 'react';
 import { Button, Loader, Stack, Title } from '@mantine/core';
 import { GameState, useGame } from '@/client/contexts/GameContext';

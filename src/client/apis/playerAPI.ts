@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { PlayerData } from '@/pages/api/players';
 import axios from 'axios';
 const API_URL = '/api/players';

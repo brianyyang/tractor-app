@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import axios from 'axios';
 import { Player } from '@/types/player';
 import { PlayingCard, playingCardToString } from '@/types/PlayingCard';
