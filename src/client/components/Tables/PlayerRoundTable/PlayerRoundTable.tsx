@@ -1,11 +1,12 @@
 'use client';
 
+import { useMemo } from 'react';
 import { Table } from '@mantine/core';
 import styles from '../Table.module.css';
 import { useGame } from '@/client/contexts/GameContext';
 import { Player } from '@/types/player';
 import { Round } from '@/types/round';
-import { useMemo } from 'react';
+import { PointCircle } from '../../PointCircles/PointCircle';
 
 interface PlayerRoundTableProps {
   pastRounds: Round[];
@@ -25,7 +26,15 @@ const createPlayerRows = (
       <Table.Td>{round.roundId}</Table.Td>
       {players.map((player) => (
         <Table.Td key={`${player.name}RoundScore`}>
-          {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
+          <PointCircle
+            isDealer={round.dealer === player.name}
+            isOnDealersTeam={
+              round.winningTeam.includes(round.dealer && player.name) ||
+              round.otherTeam.includes(round.dealer && player.name)
+            }
+          >
+            {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
+          </PointCircle>
         </Table.Td>
       ))}
     </Table.Tr>

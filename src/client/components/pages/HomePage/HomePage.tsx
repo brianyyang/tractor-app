@@ -17,20 +17,20 @@ export const HomePage = () => {
     switch (gameState) {
       case GameState.Home:
         return (
-          <Stack align='center'>
+          <Stack align="center">
             <div>
               <Button
                 className={styles.button}
-                variant='light'
-                color='indigo'
+                variant="light"
+                color="indigo"
                 onClick={() => setGameState(GameState.NewGame)}
               >
                 New Game
               </Button>
               <Button
                 className={styles.button}
-                variant='light'
-                color='indigo'
+                variant="light"
+                color="indigo"
                 onClick={() => setGameState(GameState.ResumeGame)}
               >
                 Resume Game
@@ -39,8 +39,8 @@ export const HomePage = () => {
             <Button
               className={styles.button}
               style={{ width: '50%' }}
-              variant='light'
-              color='indigo'
+              variant="light"
+              color="indigo"
               onClick={() => setGameState(GameState.GameHistory)}
             >
               Past Games
@@ -48,8 +48,8 @@ export const HomePage = () => {
             <Button
               className={styles.button}
               style={{ width: '50%' }}
-              variant='light'
-              color='indigo'
+              variant="light"
+              color="indigo"
               onClick={() => setGameState(GameState.AddPlayers)}
             >
               Add Players
@@ -78,7 +78,7 @@ export const HomePage = () => {
   };
 
   return (
-    <Stack align='center' justify='center' className={styles.pageContainer}>
+    <Stack align="center" justify="center" className={styles.pageContainer}>
       <div className={styles.titleContainer}>
         <Title
           className={styles.title}
@@ -90,7 +90,7 @@ export const HomePage = () => {
           Tractor
         </Title>
         {gameId > 0 && (
-          <Flex justify='center' mt='1rem'>
+          <Flex justify="center" mt="1rem">
             <b>{`Game ID: ${gameId}`}</b>
             {roundNumber > 0 && (
               <b
@@ -101,8 +101,8 @@ export const HomePage = () => {
         )}
       </div>
       <Flex
-        justify='center'
-        align='flex-start'
+        justify="center"
+        align="flex-start"
         className={styles.contentContainer}
       >
         {renderGameState(gameState)}
