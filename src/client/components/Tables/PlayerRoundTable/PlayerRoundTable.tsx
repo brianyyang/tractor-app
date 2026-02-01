@@ -22,15 +22,17 @@ const createPlayerRows = (
     calculatePointsPerPlayer(pastRounds, players, startingRank);
 
   const rows = pastRounds.map((round) => (
-    <Table.Tr key={round.roundId}>
+    <Table.Tr key={round.roundId} ta={'center'}>
       <Table.Td>{round.roundId}</Table.Td>
       {players.map((player) => (
-        <Table.Td key={`${player.name}RoundScore`}>
+        <Table.Td key={`${player.name}${round.roundId}score`}>
           <PointCircle
             isDealer={round.dealer === player.name}
             isOnDealersTeam={
-              round.winningTeam.includes(round.dealer && player.name) ||
-              round.otherTeam.includes(round.dealer && player.name)
+              (round.winningTeam.includes(round.dealer) &&
+                round.winningTeam.includes(player.name)) ||
+              (round.otherTeam.includes(round.dealer) &&
+                round.otherTeam.includes(player.name))
             }
           >
             {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
@@ -87,13 +89,23 @@ export const PlayerRoundTable = ({
       <Table withColumnBorders className={styles.table}>
         <Table.Thead>
           <Table.Tr>
-            <Table.Th>Round #</Table.Th>
+            <Table.Th ta={'center'}>Round</Table.Th>
             {players.map((player) => (
-              <Table.Th key={player.id}>{player.name}</Table.Th>
+              <Table.Th key={player.id} ta={'center'}>
+                {player.name}
+              </Table.Th>
             ))}
           </Table.Tr>
         </Table.Thead>
-        <Table.Tbody>{playerRows}</Table.Tbody>
+        <Table.Tbody>
+          <Table.Tr ta={'center'}>
+            <Table.Td>0</Table.Td>
+            {players.map((player) => (
+              <Table.Td key={`${player.name}0score`}>{startingRank}</Table.Td>
+            ))}
+          </Table.Tr>
+          {playerRows}
+        </Table.Tbody>
       </Table>
     </div>
   );

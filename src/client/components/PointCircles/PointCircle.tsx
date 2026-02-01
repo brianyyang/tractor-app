@@ -21,7 +21,7 @@ export const PointCircle = ({
         padding: '10px 20px',
         display: 'inline-block',
         textAlign: 'center',
-        boxShadow: isDealer ? 'inset 0 0 0 4px #8ba2ff' : 'none',
+        boxShadow: isDealer ? 'inset 0 0 0 2px #8ba2ff' : 'none',
       }}
     >
       {children}
