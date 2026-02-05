@@ -21,10 +21,13 @@ const createPlayerRows = (
   const pointsEarnedInRoundByPlayer: Map<string, number> =
     calculatePointsPerPlayer(pastRounds, players, startingRank);
 
-  const rows = pastRounds.map((round) => (
-    <Table.Tr key={round.roundId} ta={'center'}>
-      <Table.Td>{round.roundId}</Table.Td>
-      {players.map((player) => (
+  const rows = players.map((player) => (
+    <Table.Tr key={`${player.name}Row`} ta={'center'}>
+      <Table.Th ta={'center'} bg={'#121212'}>
+        {player.name}
+      </Table.Th>
+      <Table.Td key={`${player.name}0score`}>{startingRank}</Table.Td>
+      {pastRounds.map((round) => (
         <Table.Td key={`${player.name}${round.roundId}score`}>
           <PointCircle
             isDealer={round.dealer === player.name}
@@ -86,22 +89,15 @@ export const PlayerRoundTable = ({
 
   return (
     <div>
-      <Table withColumnBorders className={styles.table}>
-        <Table.Thead>
-          <Table.Tr>
-            <Table.Th ta={'center'}>Round</Table.Th>
-            {players.map((player) => (
-              <Table.Th key={player.id} ta={'center'}>
-                {player.name}
-              </Table.Th>
-            ))}
-          </Table.Tr>
-        </Table.Thead>
+      <Table withColumnBorders className={styles.table} variant="vertical">
         <Table.Tbody>
           <Table.Tr ta={'center'}>
+            <Table.Th ta={'center'} bg={'#121212'}>
+              Round
+            </Table.Th>
             <Table.Td>0</Table.Td>
-            {players.map((player) => (
-              <Table.Td key={`${player.name}0score`}>{startingRank}</Table.Td>
+            {pastRounds.map((round, index) => (
+              <Table.Td key={round.roundId}>{index + 1}</Table.Td>
             ))}
           </Table.Tr>
           {playerRows}

@@ -9,6 +9,7 @@ import { Player } from '@/types/player';
 import { createRound, getAllRoundsByID } from '@/client/apis/roundAPI';
 import { fromIRound, Round } from '@/types/round';
 import { PlayerRoundTable } from '../../Tables/PlayerRoundTable/PlayerRoundTable';
+import { RoundTable } from '../../Tables/RoundTable/RoundTable';
 
 const areFieldsValid = (
   winningTeam: Player[],
@@ -34,6 +35,7 @@ export const NewRound = () => {
   const [pointsScored, setPointsScored] = useState<string>('0');
   const [dealer, setDealer] = useState<Player>();
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
+  const [showGameDetails, setShowGameDetails] = useState<boolean>(false);
 
   const [rounds, setRounds] = useState<Round[]>([]);
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,12 @@ export const NewRound = () => {
       : '1',
   } as CSSProperties;
 
+  const showDetailsButtonStyles = {
+    marginLeft: '1rem',
+    marginTop: '1rem',
+    marginBottom: '2rem',
+  };
+
   const handleCreateRound = async () => {
     try {
       if (winningTeam.length > 0 && dealer) {
@@ -100,71 +108,95 @@ export const NewRound = () => {
 
   return (
     <Stack>
-      {roundNumber !== 1 &&
-        (loading ? (
-          <Center mt='xl'>
-            <Loader />
-          </Center>
-        ) : (
-          <PlayerRoundTable pastRounds={rounds} startingRank={startingRank} />
-        ))}
-      <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-        <b>Winning Team</b>
-      </div>
-      <StyledMultiSelect
-        data={players.map((player) => player.name)}
-        value={winningTeam.map((player) => player.name)}
-        onChange={handleWinningTeamChange}
-        w={246}
-      />
-      <div
-        style={{
-          marginLeft: '1rem',
-          marginTop: '2rem',
-          display: 'flex',
-          justifyContent: 'space-between',
-          width: '307.5px',
-        }}
-      >
-        <b>Points Scored</b>
-        <b>Dealer</b>
-      </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        <StyledSelect
-          data={['0', '1', '2', '3']}
-          value={pointsScored}
-          w={80}
-          onChange={(value) => setPointsScored(value || '0')}
-        />
-        <StyledSelect
-          key={dealerKey}
-          data={players.map((player) => player.name)}
-          value={dealer ? dealer.name : ''}
-          w={130}
-          onChange={(value) =>
-            setDealer(players.find((player) => player.name === value))
-          }
-        />
-      </div>
-      <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
-        <b>Other Team</b>
-      </div>
-      <StyledMultiSelect
-        data={players.map((player) => player.name)}
-        value={otherTeam.map((player) => player.name)}
-        w={246}
-        disabled
-      />
-      <Button
-        variant='light'
-        color='indigo'
-        w={246}
-        mb={'2rem'}
-        style={submitButtonStyles}
-        onClick={handleCreateRound}
-      >
-        Add Round
-      </Button>
+      {showGameDetails ? (
+        <>
+          <RoundTable gameId={gameId} />
+          <Button
+            variant="light"
+            color="indigo"
+            w={246}
+            style={showDetailsButtonStyles}
+            onClick={() => setShowGameDetails(false)}
+          >
+            Back
+          </Button>
+        </>
+      ) : loading ? (
+        <Center mt="xl">
+          <Loader />
+        </Center>
+      ) : (
+        <PlayerRoundTable pastRounds={rounds} startingRank={startingRank} />
+      )}
+      {!showGameDetails && (
+        <>
+          <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
+            <b>Winning Team</b>
+          </div>
+          <StyledMultiSelect
+            data={players.map((player) => player.name)}
+            value={winningTeam.map((player) => player.name)}
+            onChange={handleWinningTeamChange}
+            w={246}
+          />
+          <div
+            style={{
+              marginLeft: '1rem',
+              marginTop: '2rem',
+              display: 'flex',
+              justifyContent: 'space-between',
+              width: '307.5px',
+            }}
+          >
+            <b>Points Scored</b>
+            <b>Dealer</b>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+            <StyledSelect
+              data={['0', '1', '2', '3']}
+              value={pointsScored}
+              w={80}
+              onChange={(value) => setPointsScored(value || '0')}
+            />
+            <StyledSelect
+              key={dealerKey}
+              data={players.map((player) => player.name)}
+              value={dealer ? dealer.name : ''}
+              w={130}
+              onChange={(value) =>
+                setDealer(players.find((player) => player.name === value))
+              }
+            />
+          </div>
+          <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
+            <b>Other Team</b>
+          </div>
+          <StyledMultiSelect
+            data={players.map((player) => player.name)}
+            value={otherTeam.map((player) => player.name)}
+            w={246}
+            disabled
+          />
+          <Button
+            variant="light"
+            color="indigo"
+            w={246}
+            style={submitButtonStyles}
+            onClick={handleCreateRound}
+          >
+            Add Round
+          </Button>
+          <Button
+            variant="light"
+            color="indigo"
+            w={246}
+            style={showDetailsButtonStyles}
+            onClick={() => setShowGameDetails(true)}
+          >
+            Show Game Details
+          </Button>
+        </>
+      )}
     </Stack>
   );
 };
