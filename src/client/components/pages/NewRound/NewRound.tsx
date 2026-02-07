@@ -112,8 +112,8 @@ export const NewRound = () => {
         <>
           <RoundTable gameId={gameId} />
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(false)}
@@ -122,7 +122,7 @@ export const NewRound = () => {
           </Button>
         </>
       ) : loading ? (
-        <Center mt="xl">
+        <Center mt='xl'>
           <Loader />
         </Center>
       ) : (
@@ -178,8 +178,8 @@ export const NewRound = () => {
             disabled
           />
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={submitButtonStyles}
             onClick={handleCreateRound}
@@ -187,8 +187,8 @@ export const NewRound = () => {
             Add Round
           </Button>
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(true)}

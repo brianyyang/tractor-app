@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { CSSProperties, useMemo } from 'react';
 import { Table } from '@mantine/core';
 import styles from '../Table.module.css';
 import { useGame } from '@/client/contexts/GameContext';
@@ -13,6 +13,27 @@ interface PlayerRoundTableProps {
   startingRank: number;
 }
 
+const stickyHeaderStyles = {
+  textAlign: 'center',
+  position: 'sticky',
+  background: '#121212',
+  zIndex: 1,
+  left: 0,
+} as CSSProperties;
+
+const stickyTotalStyles = {
+  textAlign: 'center',
+  position: 'sticky',
+  background: '#121212',
+  zIndex: 1,
+  right: 0,
+} as CSSProperties;
+
+const scrollingDivStyles = {
+  maxWidth: '100vw',
+  overflowX: 'scroll',
+} as CSSProperties;
+
 const createPlayerRows = (
   pastRounds: Round[],
   players: Player[],
@@ -23,12 +44,13 @@ const createPlayerRows = (
 
   const rows = players.map((player) => (
     <Table.Tr key={`${player.name}Row`} ta={'center'}>
-      <Table.Th ta={'center'} bg={'#121212'}>
-        {player.name}
-      </Table.Th>
+      <Table.Th style={stickyHeaderStyles}>{player.name}</Table.Th>
       <Table.Td key={`${player.name}0score`}>{startingRank}</Table.Td>
-      {pastRounds.map((round) => (
-        <Table.Td key={`${player.name}${round.roundId}score`}>
+      {pastRounds.map((round, i) => (
+        <Table.Td
+          key={`${player.name}${round.roundId}score`}
+          style={i === pastRounds.length - 1 ? stickyTotalStyles : undefined}
+        >
           <PointCircle
             isDealer={round.dealer === player.name}
             isOnDealersTeam={
@@ -88,16 +110,23 @@ export const PlayerRoundTable = ({
   }, [pastRounds]);
 
   return (
-    <div>
-      <Table withColumnBorders className={styles.table} variant="vertical">
+    <div style={scrollingDivStyles}>
+      <Table withColumnBorders className={styles.table} variant='vertical'>
         <Table.Tbody>
           <Table.Tr ta={'center'}>
-            <Table.Th ta={'center'} bg={'#121212'}>
-              Round
-            </Table.Th>
+            <Table.Th style={stickyHeaderStyles}>Round</Table.Th>
             <Table.Td>0</Table.Td>
             {pastRounds.map((round, index) => (
-              <Table.Td key={round.roundId}>{index + 1}</Table.Td>
+              <Table.Td
+                key={round.roundId}
+                style={
+                  index === pastRounds.length - 1
+                    ? stickyTotalStyles
+                    : undefined
+                }
+              >
+                {index + 1}
+              </Table.Td>
             ))}
           </Table.Tr>
           {playerRows}
