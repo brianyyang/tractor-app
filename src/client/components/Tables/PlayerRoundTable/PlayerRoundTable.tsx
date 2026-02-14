@@ -21,14 +21,6 @@ const stickyHeaderStyles = {
   left: 0,
 } as CSSProperties;
 
-const stickyTotalStyles = {
-  textAlign: 'center',
-  position: 'sticky',
-  background: '#121212',
-  zIndex: 1,
-  right: 0,
-} as CSSProperties;
-
 const scrollingDivStyles = {
   maxWidth: '100vw',
   overflowX: 'scroll',
@@ -47,10 +39,7 @@ const createPlayerRows = (
       <Table.Th style={stickyHeaderStyles}>{player.name}</Table.Th>
       <Table.Td key={`${player.name}0score`}>{startingRank}</Table.Td>
       {pastRounds.map((round, i) => (
-        <Table.Td
-          key={`${player.name}${round.roundId}score`}
-          style={i === pastRounds.length - 1 ? stickyTotalStyles : undefined}
-        >
+        <Table.Td key={`${player.name}${round.roundId}score`}>
           <PointCircle
             isDealer={round.dealer === player.name}
             isOnDealersTeam={
@@ -111,22 +100,13 @@ export const PlayerRoundTable = ({
 
   return (
     <div style={scrollingDivStyles}>
-      <Table withColumnBorders className={styles.table} variant='vertical'>
+      <Table withColumnBorders className={styles.table} variant="vertical">
         <Table.Tbody>
           <Table.Tr ta={'center'}>
             <Table.Th style={stickyHeaderStyles}>Round</Table.Th>
             <Table.Td>0</Table.Td>
             {pastRounds.map((round, index) => (
-              <Table.Td
-                key={round.roundId}
-                style={
-                  index === pastRounds.length - 1
-                    ? stickyTotalStyles
-                    : undefined
-                }
-              >
-                {index + 1}
-              </Table.Td>
+              <Table.Td key={round.roundId}>{index + 1}</Table.Td>
             ))}
           </Table.Tr>
           {playerRows}
