@@ -2,6 +2,8 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '@/server/mongodb';
 import Player, { IPlayer } from '@/server/models/Player';
+import Game from '@/server/models/Game';
+import Round from '@/server/models/Round';
 
 export type PlayerData = {
   message?: string;
@@ -41,9 +43,37 @@ export default async function handler(
           .status(400)
           .json({ error: 'Failed to create player: please notify Brian.' });
       }
+
+    case 'DELETE': // delete players
+      const { playersToDelete } = req.body;
+      try {
+        await Player.deleteMany({
+          name: { $in: playersToDelete },
+        });
+
+        await Game.deleteMany({
+          players: { $in: playersToDelete },
+        });
+
+        await Round.deleteMany({
+          $or: [
+            { winningTeam: { $in: playersToDelete } },
+            { otherTeam: { $in: playersToDelete } },
+          ],
+        });
+
+        return res.status(200).json({
+          message: 'Players deleted successfully',
+        });
+      } catch (error: any) {
+        return res
+          .status(500)
+          .json({ message: 'Error deleting players: ' + error.message });
+      }
+
     default:
       // handle unsupported request methods
-      res.setHeader('Allow', ['GET', 'POST']);
+      res.setHeader('Allow', ['GET', 'POST', 'DELETE']);
       return res.status(405).end(`Method ${req.method} Not Allowed`);
   }
 }

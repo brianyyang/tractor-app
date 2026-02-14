@@ -29,3 +29,19 @@ export const createPlayer = async (playerName: string) => {
     );
   }
 };
+
+// delete players
+export const deletePlayers = async (players: string[]) => {
+  try {
+    const response = await axios.delete(API_URL, {
+      data: { playersToDelete: players },
+    });
+    const data: PlayerData = response.data;
+    return data;
+  } catch (error: any) {
+    throw new Error(
+      error.response?.data?.error ||
+        'Failed to delete players: please notify Brian.',
+    );
+  }
+};

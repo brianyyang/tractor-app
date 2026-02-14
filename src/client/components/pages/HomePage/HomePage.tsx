@@ -6,7 +6,7 @@ import { NewGame } from '../NewGame/NewGame';
 import { NewRound } from '../NewRound/NewRound';
 import styles from './HomePage.module.css';
 import { GameHistory } from '../GameHistory/GameHistory';
-import { AddPlayers } from '../AddPlayers/AddPlayers';
+import { ManagePlayers } from '../ManagePlayers/ManagePlayers';
 import { ResumeGame } from '../ResumeGame/ResumeGame';
 
 export const HomePage = () => {
@@ -50,9 +50,9 @@ export const HomePage = () => {
               style={{ width: '50%' }}
               variant='light'
               color='indigo'
-              onClick={() => setGameState(GameState.AddPlayers)}
+              onClick={() => setGameState(GameState.ManagePlayers)}
             >
-              Add Players
+              Manage Players
             </Button>
           </Stack>
         );
@@ -66,8 +66,8 @@ export const HomePage = () => {
       case GameState.GameHistory:
         return <GameHistory />;
 
-      case GameState.AddPlayers:
-        return <AddPlayers />;
+      case GameState.ManagePlayers:
+        return <ManagePlayers />;
 
       case GameState.ResumeGame:
         return <ResumeGame />;

@@ -1,7 +1,7 @@
 import { Button, Flex, Modal, Title } from '@mantine/core';
 
-interface DeleteGameModalProps {
-  handleDeleteGame: () => void;
+interface DeletePlayersModalProps {
+  handleDeletePlayers: () => void;
   isOpened: boolean;
   close: () => void;
 }
@@ -11,11 +11,11 @@ const buttonStyles = {
   padding: '0px 1rem',
 };
 
-export const DeleteGameModal = ({
-  handleDeleteGame,
+export const DeletePlayersModal = ({
+  handleDeletePlayers,
   isOpened,
   close,
-}: DeleteGameModalProps) => {
+}: DeletePlayersModalProps) => {
   return (
     <Modal
       opened={isOpened}
@@ -33,14 +33,14 @@ export const DeleteGameModal = ({
       }}
     >
       <Title order={6}>
-        Are you sure you want to delete this game? This will delete all rounds
-        for the game too.
+        Are you sure you want to delete these players? This will delete all
+        games and rounds that the players were in too.
       </Title>
       <Flex justify='center'>
         <Button style={buttonStyles} onClick={close}>
           Cancel
         </Button>
-        <Button style={buttonStyles} onClick={handleDeleteGame}>
+        <Button style={buttonStyles} onClick={handleDeletePlayers}>
           Confirm
         </Button>
       </Flex>

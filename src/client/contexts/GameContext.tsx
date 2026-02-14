@@ -8,7 +8,7 @@ export enum GameState {
   NewGame = 'new game',
   NewRound = 'new round',
   GameHistory = 'game history',
-  AddPlayers = 'add players',
+  ManagePlayers = 'manage players',
   ResumeGame = 'resume game',
 }
 
