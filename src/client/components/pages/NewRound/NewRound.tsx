@@ -1,7 +1,7 @@
 'use client';
 
 import { CSSProperties, useEffect, useMemo, useState } from 'react';
-import { Button, Center, Loader, Stack } from '@mantine/core';
+import { Button, Center, Loader, Stack, Title } from '@mantine/core';
 import { GameState, useGame } from '@/client/contexts/GameContext';
 import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
 import { StyledSelect } from '../../Selects/StyledSelect';
@@ -39,6 +39,7 @@ export const NewRound = () => {
     setRoundNumber,
     startingRank,
     setGameState,
+    clearGameState,
   } = useGame();
   const [winningTeam, setWinningTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
@@ -46,6 +47,7 @@ export const NewRound = () => {
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
   const [showGameDetails, setShowGameDetails] = useState<boolean>(false);
   const [deleteModalOpen, { close, open }] = useDisclosure(false);
+  const [gameDeleted, setGameDeleted] = useState<boolean>(false);
 
   const [rounds, setRounds] = useState<Round[]>([]);
   const [loading, setLoading] = useState(true);
@@ -125,7 +127,9 @@ export const NewRound = () => {
     try {
       await deleteGameById(String(gameId));
       resetRoundFields();
-      setGameState(GameState.Home);
+      close();
+      clearGameState();
+      setGameDeleted(true);
     } catch (err) {
       console.error('Error deleting game:', err);
     }
@@ -133,12 +137,27 @@ export const NewRound = () => {
 
   return (
     <Stack>
-      {showGameDetails ? (
+      {gameDeleted ? (
+        <Stack align='center'>
+          <Title order={4}>Game deleted successfully!</Title>
+          <Button
+            variant='light'
+            color='indigo'
+            w={246}
+            style={showDetailsButtonStyles}
+            onClick={() => {
+              setGameState(GameState.Home);
+            }}
+          >
+            Return to Homepage
+          </Button>
+        </Stack>
+      ) : showGameDetails ? (
         <>
           <RoundTable gameId={gameId} />
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(false)}
@@ -147,13 +166,13 @@ export const NewRound = () => {
           </Button>
         </>
       ) : loading ? (
-        <Center mt="xl">
+        <Center mt='xl'>
           <Loader />
         </Center>
       ) : (
         <PlayerRoundTable pastRounds={rounds} startingRank={startingRank} />
       )}
-      {!showGameDetails && (
+      {!showGameDetails && !gameDeleted && (
         <>
           <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
             <b>Winning Team</b>
@@ -203,8 +222,8 @@ export const NewRound = () => {
             disabled
           />
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={submitButtonStyles}
             onClick={handleCreateRound}
@@ -212,8 +231,8 @@ export const NewRound = () => {
             Add Round
           </Button>
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(true)}
@@ -221,8 +240,8 @@ export const NewRound = () => {
             Show Game Details
           </Button>
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='indigo'
             w={246}
             style={deleteGameButtonStyles}
             onClick={open}
