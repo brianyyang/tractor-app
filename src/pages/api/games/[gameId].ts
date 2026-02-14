@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { NextApiRequest, NextApiResponse } from 'next';
 import connectToDatabase from '@/server/mongodb';
 import Game, { IGame } from '@/server/models/Game';
