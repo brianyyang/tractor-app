@@ -8,13 +8,13 @@ const API_URL = '/api/games/';
 // create a round for game
 export const createRound = async (
   gameId: number,
-  winningTeam: Player[],
+  dealerTeam: Player[],
   otherTeam: Player[],
   pointsScored: number,
   dealer: Player,
 ) => {
   const roundBody = {
-    winningTeam: winningTeam.map((player) => player.name),
+    dealerTeam: dealerTeam.map((player) => player.name),
     otherTeam: otherTeam.map((player) => player.name),
     pointsScored: pointsScored,
     dealer: dealer.name,
@@ -32,14 +32,14 @@ export const createRound = async (
 export const editRound = async (
   gameId: number,
   roundNumber: number,
-  winningTeam: Player[],
+  dealerTeam: Player[],
   otherTeam: Player[],
   pointsScored: number,
   dealer: Player,
 ) => {
   const roundBody = {
     roundNumber: roundNumber,
-    winningTeam: winningTeam.map((player) => player.name),
+    dealerTeam: dealerTeam.map((player) => player.name),
     otherTeam: otherTeam.map((player) => player.name),
     pointsScored: pointsScored,
     dealer: dealer.name,

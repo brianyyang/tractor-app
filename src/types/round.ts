@@ -3,7 +3,7 @@ import { IRound } from '@/server/models/Round';
 export type Round = {
   gameId: number;
   roundId: number;
-  winningTeam: string[];
+  dealerTeam: string[];
   otherTeam: string[];
   pointsScored: number;
   dealer: string;
@@ -13,7 +13,7 @@ export const fromIRound = (iRound: IRound) => {
   return {
     gameId: iRound.gameId,
     roundId: iRound.roundId,
-    winningTeam: iRound.winningTeam,
+    dealerTeam: iRound.dealerTeam,
     otherTeam: iRound.otherTeam,
     pointsScored: iRound.pointsScored,
     dealer: iRound.dealer,

@@ -57,7 +57,7 @@ export default async function handler(
 
         await Round.deleteMany({
           $or: [
-            { winningTeam: { $in: playersToDelete } },
+            { dealerTeam: { $in: playersToDelete } },
             { otherTeam: { $in: playersToDelete } },
           ],
         });

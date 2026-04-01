@@ -56,8 +56,8 @@ const createPlayerRows = (
           <PointCircle
             isDealer={round.dealer === player.name}
             isOnDealersTeam={
-              (round.winningTeam.includes(round.dealer) &&
-                round.winningTeam.includes(player.name)) ||
+              (round.dealerTeam.includes(round.dealer) &&
+                round.dealerTeam.includes(player.name)) ||
               (round.otherTeam.includes(round.dealer) &&
                 round.otherTeam.includes(player.name))
             }
@@ -88,7 +88,7 @@ const calculatePointsPerPlayer = (
   pastRounds.forEach((round) => {
     players.forEach((player) => {
       const isFirstRound = round.roundId === 1;
-      if (round.winningTeam.includes(player.name)) {
+      if (round.dealerTeam.includes(player.name)) {
         pointsEarnedPerPlayer.set(
           `${player.name}${round.roundId}`,
           isFirstRound

@@ -6,7 +6,7 @@ import { IGame } from './Game';
 export interface IRound extends Document {
   gameId: IGame['gameId'];
   roundId: number;
-  winningTeam: IPlayer['name'][];
+  dealerTeam: IPlayer['name'][];
   otherTeam: IPlayer['name'][];
   pointsScored: number;
   dealer: IPlayer['name'];
@@ -16,7 +16,7 @@ const RoundSchema = new Schema<IRound>({
   gameId: { type: Schema.Types.Number, ref: 'Game', required: true },
   roundId: { type: Number },
   pointsScored: { type: Number, required: true },
-  winningTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
+  dealerTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
   otherTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
   dealer: { type: Schema.Types.String, ref: 'Player', required: true },
 });
@@ -27,7 +27,7 @@ RoundSchema.pre<IRound>('save', async function (next) {
     const counter = await Counter.findOneAndUpdate(
       { name: `gameId${this.gameId}_roundId` },
       { $inc: { seq: 1 } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
 
     this.roundId = counter.seq;

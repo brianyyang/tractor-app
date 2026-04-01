@@ -18,23 +18,8 @@ import { deleteGameById, endGameById } from '@/client/apis/gameAPI';
 import { useDisclosure } from '@mantine/hooks';
 import { DeleteGameModal } from './DeleteGameModal';
 import { EndGameModal } from './EndGameModal';
-
-const areFieldsValid = (
-  winningTeam: Player[],
-  otherTeam: Player[],
-  pointsScored: string,
-  dealer: Player | undefined,
-) => {
-  return !(
-    winningTeam.length === 0 ||
-    otherTeam.length === 0 ||
-    (pointsScored !== '0' &&
-      pointsScored !== '1' &&
-      pointsScored !== '2' &&
-      pointsScored !== '3') ||
-    dealer === undefined
-  );
-};
+import { StyledTextInput } from '../../TextInputs/StyledTextInput';
+import { areFieldsValid } from './NewRoundUtils';
 
 export const NewRound = () => {
   const {
@@ -48,7 +33,7 @@ export const NewRound = () => {
     setGameEnded,
     clearGameState,
   } = useGame();
-  const [winningTeam, setWinningTeam] = useState<Player[]>([]);
+  const [dealerTeam, setDealerTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
   const [dealer, setDealer] = useState<Player>();
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
@@ -83,9 +68,9 @@ export const NewRound = () => {
   useEffect(() => {
     if (isEditingRound) {
       const roundToEdit = rounds[roundNumber - 1];
-      setWinningTeam(
+      setDealerTeam(
         players.filter((player) =>
-          roundToEdit.winningTeam.includes(player.name),
+          roundToEdit.dealerTeam.includes(player.name),
         ),
       );
       setPointsScored(String(roundToEdit.pointsScored));
@@ -94,18 +79,18 @@ export const NewRound = () => {
   }, [isEditingRound, roundNumber]);
 
   const otherTeam = useMemo(() => {
-    return players.filter((player) => !winningTeam.includes(player));
-  }, [winningTeam]);
+    return players.filter((player) => !dealerTeam.includes(player));
+  }, [dealerTeam]);
 
-  const handleWinningTeamChange = (values: string[]) => {
+  const handleDealerTeamChange = (values: string[]) => {
     const selectedPlayers = players.filter((player) =>
       values.includes(player.name),
     );
-    setWinningTeam(selectedPlayers);
+    setDealerTeam(selectedPlayers);
   };
 
   const resetRoundFields = () => {
-    setWinningTeam([]);
+    setDealerTeam([]);
     setPointsScored('0');
     setDealer(undefined);
     setDealerKey((k) => k + 1);
@@ -114,10 +99,10 @@ export const NewRound = () => {
   const submitButtonStyles = {
     marginLeft: '1rem',
     marginTop: '2rem',
-    pointerEvents: !areFieldsValid(winningTeam, otherTeam, pointsScored, dealer)
+    pointerEvents: !areFieldsValid(dealerTeam, otherTeam, pointsScored, dealer)
       ? 'none'
       : undefined,
-    opacity: !areFieldsValid(winningTeam, otherTeam, pointsScored, dealer)
+    opacity: !areFieldsValid(dealerTeam, otherTeam, pointsScored, dealer)
       ? '0.8'
       : '1',
   } as CSSProperties;
@@ -135,10 +120,10 @@ export const NewRound = () => {
 
   const handleCreateRound = async () => {
     try {
-      if (winningTeam.length > 0 && dealer) {
+      if (dealerTeam.length > 0 && dealer) {
         const roundData = await createRound(
           gameId,
-          winningTeam,
+          dealerTeam,
           otherTeam,
           Number(pointsScored),
           dealer,
@@ -157,11 +142,11 @@ export const NewRound = () => {
 
   const handleEditRound = async () => {
     try {
-      if (winningTeam.length > 0 && dealer) {
+      if (dealerTeam.length > 0 && dealer) {
         const roundData = await editRound(
           gameId,
           roundNumber,
-          winningTeam,
+          dealerTeam,
           otherTeam,
           Number(pointsScored),
           dealer,
@@ -236,12 +221,12 @@ export const NewRound = () => {
       {!showGameDetails && !gameDeleted && !gameEnded && (
         <>
           <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-            <b>Winning Team</b>
+            <b>Dealer Team</b>
           </div>
           <StyledMultiSelect
             data={players.map((player) => player.name)}
-            value={winningTeam.map((player) => player.name)}
-            onChange={handleWinningTeamChange}
+            value={dealerTeam.map((player) => player.name)}
+            onChange={handleDealerTeamChange}
             w={246}
           />
           <div
@@ -257,11 +242,10 @@ export const NewRound = () => {
             <b>Dealer</b>
           </div>
           <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <StyledSelect
-              data={['0', '1', '2', '3']}
+            <StyledTextInput
               value={pointsScored}
               w={80}
-              onChange={(value) => setPointsScored(value || '0')}
+              onChange={(input) => setPointsScored(input.target.value)}
             />
             <StyledSelect
               key={dealerKey}

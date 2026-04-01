@@ -15,12 +15,12 @@ export default async function handler(
 ) {
   await connectToDatabase();
   const gameId = req.query.gameId;
-  const { winningTeam, otherTeam, pointsScored, dealer } = req.body;
+  const { dealerTeam, otherTeam, pointsScored, dealer } = req.body;
 
   switch (req.method) {
     case 'POST': // create a new round
       if (
-        !winningTeam ||
+        !dealerTeam ||
         !otherTeam ||
         (pointsScored !== 0 && !pointsScored) ||
         !dealer
@@ -31,7 +31,7 @@ export default async function handler(
       try {
         const round = new Round({
           gameId: gameId,
-          winningTeam: winningTeam,
+          dealerTeam: dealerTeam,
           otherTeam: otherTeam,
           pointsScored: pointsScored,
           dealer: dealer,
@@ -49,7 +49,7 @@ export default async function handler(
 
     case 'PATCH': // edit an existing round
       if (
-        !winningTeam ||
+        !dealerTeam ||
         !otherTeam ||
         (pointsScored !== 0 && !pointsScored) ||
         !dealer
@@ -65,7 +65,7 @@ export default async function handler(
           },
           {
             $set: {
-              winningTeam: winningTeam,
+              dealerTeam: dealerTeam,
               otherTeam: otherTeam,
               pointsScored: pointsScored,
               dealer: dealer,
