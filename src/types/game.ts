@@ -6,6 +6,7 @@ export type Game = {
   date: Date;
   players: string[];
   startingCard: PlayingCard;
+  isEnded: boolean;
 };
 
 export const fromIGame = (iGame: IGame) => {
@@ -14,5 +15,6 @@ export const fromIGame = (iGame: IGame) => {
     date: iGame.date,
     players: iGame.players,
     startingCard: stringToPlayingCard(iGame.startingCard),
+    isEnded: iGame.isEnded,
   } as Game;
 };

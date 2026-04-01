@@ -1,18 +1,23 @@
 'use client';
 
 import { CSSProperties, useEffect, useMemo, useState } from 'react';
-import { Button, Center, Loader, Stack, Title } from '@mantine/core';
+import { Button, Stack, Title } from '@mantine/core';
 import { GameState, useGame } from '@/client/contexts/GameContext';
 import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
 import { StyledSelect } from '../../Selects/StyledSelect';
 import { Player } from '@/types/player';
-import { createRound, getAllRoundsByID } from '@/client/apis/roundAPI';
+import {
+  createRound,
+  editRound,
+  getAllRoundsByID,
+} from '@/client/apis/roundAPI';
 import { fromIRound, Round } from '@/types/round';
 import { PlayerRoundTable } from '../../Tables/PlayerRoundTable/PlayerRoundTable';
 import { RoundTable } from '../../Tables/RoundTable/RoundTable';
-import { deleteGameById } from '@/client/apis/gameAPI';
+import { deleteGameById, endGameById } from '@/client/apis/gameAPI';
 import { useDisclosure } from '@mantine/hooks';
 import { DeleteGameModal } from './DeleteGameModal';
+import { EndGameModal } from './EndGameModal';
 
 const areFieldsValid = (
   winningTeam: Player[],
@@ -39,6 +44,8 @@ export const NewRound = () => {
     setRoundNumber,
     startingRank,
     setGameState,
+    gameEnded,
+    setGameEnded,
     clearGameState,
   } = useGame();
   const [winningTeam, setWinningTeam] = useState<Player[]>([]);
@@ -46,13 +53,24 @@ export const NewRound = () => {
   const [dealer, setDealer] = useState<Player>();
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
   const [showGameDetails, setShowGameDetails] = useState<boolean>(false);
-  const [deleteModalOpen, { close, open }] = useDisclosure(false);
+  const [endModalOpen, { close: closeEnd, open: openEnd }] =
+    useDisclosure(false);
+  const [deleteModalOpen, { close: closeDelete, open: openDelete }] =
+    useDisclosure(false);
   const [gameDeleted, setGameDeleted] = useState<boolean>(false);
 
   const [rounds, setRounds] = useState<Round[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const isEditingRound = useMemo(() => {
+    return !loading && !gameDeleted && roundNumber !== rounds.length + 1;
+  }, [roundNumber, rounds]);
+
   useEffect(() => {
+    handleLoadRounds();
+  }, [gameId, roundNumber]);
+
+  const handleLoadRounds = () => {
     getAllRoundsByID(gameId)
       .then((data) => {
         if (data.rounds) {
@@ -60,7 +78,20 @@ export const NewRound = () => {
         }
       })
       .finally(() => setLoading(false));
-  }, [gameId, roundNumber]);
+  };
+
+  useEffect(() => {
+    if (isEditingRound) {
+      const roundToEdit = rounds[roundNumber - 1];
+      setWinningTeam(
+        players.filter((player) =>
+          roundToEdit.winningTeam.includes(player.name),
+        ),
+      );
+      setPointsScored(String(roundToEdit.pointsScored));
+      setDealer(players.find((player) => player.name === roundToEdit.dealer));
+    }
+  }, [isEditingRound, roundNumber]);
 
   const otherTeam = useMemo(() => {
     return players.filter((player) => !winningTeam.includes(player));
@@ -115,11 +146,41 @@ export const NewRound = () => {
         if (roundData.round) {
           const createdRound = fromIRound(roundData.round);
           setRoundNumber(createdRound.roundId + 1);
+          setLoading(true);
           resetRoundFields();
         }
       }
     } catch (err) {
       console.error('Error creating round:', err);
+    }
+  };
+
+  const handleEditRound = async () => {
+    try {
+      if (winningTeam.length > 0 && dealer) {
+        const roundData = await editRound(
+          gameId,
+          roundNumber,
+          winningTeam,
+          otherTeam,
+          Number(pointsScored),
+          dealer,
+        );
+        if (roundData.round) {
+          handleLoadRounds();
+        }
+      }
+    } catch (err) {
+      console.error('Error editing round:', err);
+    }
+  };
+
+  const handleEndGame = async () => {
+    try {
+      await endGameById(String(gameId));
+      setGameEnded(true);
+    } catch (err) {
+      console.error('Error deleting game:', err);
     }
   };
 
@@ -165,14 +226,14 @@ export const NewRound = () => {
             Back
           </Button>
         </>
-      ) : loading ? (
-        <Center mt='xl'>
-          <Loader />
-        </Center>
       ) : (
-        <PlayerRoundTable pastRounds={rounds} startingRank={startingRank} />
+        <PlayerRoundTable
+          pastRounds={rounds}
+          startingRank={startingRank}
+          isGameEnded={gameEnded}
+        />
       )}
-      {!showGameDetails && !gameDeleted && (
+      {!showGameDetails && !gameDeleted && !gameEnded && (
         <>
           <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
             <b>Winning Team</b>
@@ -226,9 +287,9 @@ export const NewRound = () => {
             color='indigo'
             w={246}
             style={submitButtonStyles}
-            onClick={handleCreateRound}
+            onClick={isEditingRound ? handleEditRound : handleCreateRound}
           >
-            Add Round
+            {isEditingRound ? 'Edit Round' : 'Add Round'}
           </Button>
           <Button
             variant='light'
@@ -243,15 +304,29 @@ export const NewRound = () => {
             variant='light'
             color='indigo'
             w={246}
+            style={showDetailsButtonStyles}
+            onClick={openEnd}
+          >
+            End Game
+          </Button>
+          <Button
+            variant='light'
+            color='indigo'
+            w={246}
             style={deleteGameButtonStyles}
-            onClick={open}
+            onClick={openDelete}
           >
             Delete Game
           </Button>
+          <EndGameModal
+            handleEndGame={handleEndGame}
+            isOpened={endModalOpen}
+            close={closeEnd}
+          />
           <DeleteGameModal
             handleDeleteGame={handleDeleteGame}
             isOpened={deleteModalOpen}
-            close={close}
+            close={closeDelete}
           />
         </>
       )}

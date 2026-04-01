@@ -6,6 +6,11 @@
   padding: 0.5rem;
 }
 
+.editRound:hover {
+  background-color: #3a3a3a;
+  cursor: pointer;
+}
+
 .gameRow:hover {
   background-color: #3a3a3a;
   cursor: pointer;

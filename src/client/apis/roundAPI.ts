@@ -28,6 +28,34 @@ export const createRound = async (
   }
 };
 
+// edit a round for a game
+export const editRound = async (
+  gameId: number,
+  roundNumber: number,
+  winningTeam: Player[],
+  otherTeam: Player[],
+  pointsScored: number,
+  dealer: Player,
+) => {
+  const roundBody = {
+    roundNumber: roundNumber,
+    winningTeam: winningTeam.map((player) => player.name),
+    otherTeam: otherTeam.map((player) => player.name),
+    pointsScored: pointsScored,
+    dealer: dealer.name,
+  };
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${gameId}/rounds`,
+      roundBody,
+    );
+    const data: RoundData = response.data;
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to edit round');
+  }
+};
+
 // retrieve round by ID for game
 export const getRoundByID = async (gameId: number, roundId: number) => {
   try {
