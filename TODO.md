@@ -1,3 +1,5 @@
+# TODOs
+
 - [x] Editing past rounds
 
 - [x] Ending games and calculating
@@ -10,3 +12,10 @@ susan loses 2 points from penny and 1 point from sisi
 
 - [ ] Boat Ticket input
       New input box to enter a suit and a sequence. This designates what the friend of the dealer played that round to become friends with the dealer.
+
+### Daily Goals
+
+##### 4/3
+
+- [x] Boat ticket schema added to Round schema
+- [x] Break up NewRound page into components (table, inputs, buttons)

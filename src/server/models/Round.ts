@@ -3,6 +3,21 @@ import { IPlayer } from './Player';
 import { Counter } from './Counter';
 import { IGame } from './Game';
 
+export interface IBoatTicket {
+  player: IPlayer['name'];
+  card: String;
+  sequence: number;
+}
+
+const BoatTicketSchema = new Schema<IBoatTicket>(
+  {
+    player: { type: Schema.Types.String, ref: 'Player', required: true },
+    card: { type: String, required: true },
+    sequence: { type: Number, required: true, min: 1 },
+  },
+  { _id: false },
+);
+
 export interface IRound extends Document {
   gameId: IGame['gameId'];
   roundId: number;
@@ -10,6 +25,7 @@ export interface IRound extends Document {
   otherTeam: IPlayer['name'][];
   pointsScored: number;
   dealer: IPlayer['name'];
+  boatTickets: IBoatTicket[];
 }
 
 const RoundSchema = new Schema<IRound>({
@@ -19,6 +35,7 @@ const RoundSchema = new Schema<IRound>({
   dealerTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
   otherTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
   dealer: { type: Schema.Types.String, ref: 'Player', required: true },
+  boatTickets: { type: [BoatTicketSchema], default: [] },
 });
 
 // before saving a new Round, increment the counter and populate the round ID

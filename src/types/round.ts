@@ -1,4 +1,18 @@
-import { IRound } from '@/server/models/Round';
+import { IBoatTicket, IRound } from '@/server/models/Round';
+
+export type BoatTicket = {
+  player: string;
+  card: string;
+  sequence: number;
+};
+
+export const fromIBoatTicket = (iBoatTicket: IBoatTicket) => {
+  return {
+    player: iBoatTicket.player,
+    card: iBoatTicket.card,
+    sequence: iBoatTicket.sequence,
+  } as BoatTicket;
+};
 
 export type Round = {
   gameId: number;
@@ -7,6 +21,7 @@ export type Round = {
   otherTeam: string[];
   pointsScored: number;
   dealer: string;
+  boatTickets: BoatTicket[];
 };
 
 export const fromIRound = (iRound: IRound) => {

@@ -1,10 +1,8 @@
 'use client';
 
 import { CSSProperties, useEffect, useMemo, useState } from 'react';
-import { Button, Stack, Title } from '@mantine/core';
-import { GameState, useGame } from '@/client/contexts/GameContext';
-import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
-import { StyledSelect } from '../../Selects/StyledSelect';
+import { Button, Stack } from '@mantine/core';
+import { useGame } from '@/client/contexts/GameContext';
 import { Player } from '@/types/player';
 import {
   createRound,
@@ -16,10 +14,12 @@ import { PlayerRoundTable } from '../../Tables/PlayerRoundTable/PlayerRoundTable
 import { RoundTable } from '../../Tables/RoundTable/RoundTable';
 import { deleteGameById, endGameById } from '@/client/apis/gameAPI';
 import { useDisclosure } from '@mantine/hooks';
-import { DeleteGameModal } from './DeleteGameModal';
-import { EndGameModal } from './EndGameModal';
-import { StyledTextInput } from '../../TextInputs/StyledTextInput';
+import { DeleteGameModal } from './subcomponents/DeleteGameModal';
+import { EndGameModal } from './subcomponents/EndGameModal';
 import { areFieldsValid } from './NewRoundUtils';
+import { DeletedGame } from './subcomponents/DeletedGame';
+import { NewRoundInputs } from './subcomponents/NewRoundInputs';
+import { NewRoundButtons } from './subcomponents/NewRoundButtons';
 
 export const NewRound = () => {
   const {
@@ -28,7 +28,6 @@ export const NewRound = () => {
     roundNumber,
     setRoundNumber,
     startingRank,
-    setGameState,
     gameEnded,
     setGameEnded,
     clearGameState,
@@ -112,12 +111,6 @@ export const NewRound = () => {
     marginTop: '1rem',
   };
 
-  const deleteGameButtonStyles = {
-    marginLeft: '1rem',
-    marginTop: '1rem',
-    marginBottom: '2rem',
-  };
-
   const handleCreateRound = async () => {
     try {
       if (dealerTeam.length > 0 && dealer) {
@@ -184,20 +177,7 @@ export const NewRound = () => {
   return (
     <Stack>
       {gameDeleted ? (
-        <Stack align='center'>
-          <Title order={4}>Game deleted successfully!</Title>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={showDetailsButtonStyles}
-            onClick={() => {
-              setGameState(GameState.Home);
-            }}
-          >
-            Return to Homepage
-          </Button>
-        </Stack>
+        <DeletedGame />
       ) : showGameDetails ? (
         <>
           <RoundTable gameId={gameId} />
@@ -220,88 +200,26 @@ export const NewRound = () => {
       )}
       {!showGameDetails && !gameDeleted && !gameEnded && (
         <>
-          <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-            <b>Dealer Team</b>
-          </div>
-          <StyledMultiSelect
-            data={players.map((player) => player.name)}
-            value={dealerTeam.map((player) => player.name)}
-            onChange={handleDealerTeamChange}
-            w={246}
+          <NewRoundInputs
+            players={players}
+            dealerTeam={dealerTeam}
+            otherTeam={otherTeam}
+            handleDealerTeamChange={handleDealerTeamChange}
+            pointsScored={pointsScored}
+            setPointsScored={setPointsScored}
+            dealer={dealer}
+            setDealer={setDealer}
+            dealerKey={dealerKey}
           />
-          <div
-            style={{
-              marginLeft: '1rem',
-              marginTop: '2rem',
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '307.5px',
-            }}
-          >
-            <b>Points Scored</b>
-            <b>Dealer</b>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <StyledTextInput
-              value={pointsScored}
-              w={80}
-              onChange={(input) => setPointsScored(input.target.value)}
-            />
-            <StyledSelect
-              key={dealerKey}
-              data={players.map((player) => player.name)}
-              value={dealer ? dealer.name : ''}
-              w={130}
-              onChange={(value) =>
-                setDealer(players.find((player) => player.name === value))
-              }
-            />
-          </div>
-          <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
-            <b>Other Team</b>
-          </div>
-          <StyledMultiSelect
-            data={players.map((player) => player.name)}
-            value={otherTeam.map((player) => player.name)}
-            w={246}
-            disabled
+          <NewRoundButtons
+            isEditingRound={isEditingRound}
+            handleEditRound={handleEditRound}
+            handleCreateRound={handleCreateRound}
+            setShowGameDetails={setShowGameDetails}
+            openEnd={openEnd}
+            openDelete={openDelete}
+            submitButtonStyles={submitButtonStyles}
           />
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={submitButtonStyles}
-            onClick={isEditingRound ? handleEditRound : handleCreateRound}
-          >
-            {isEditingRound ? 'Edit Round' : 'Add Round'}
-          </Button>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={showDetailsButtonStyles}
-            onClick={() => setShowGameDetails(true)}
-          >
-            Show Game Details
-          </Button>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={showDetailsButtonStyles}
-            onClick={openEnd}
-          >
-            End Game
-          </Button>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={deleteGameButtonStyles}
-            onClick={openDelete}
-          >
-            Delete Game
-          </Button>
           <EndGameModal
             handleEndGame={handleEndGame}
             isOpened={endModalOpen}
