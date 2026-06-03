@@ -10,7 +10,7 @@ penny wins 2 points from susan and 1 point from susan
 sisi wins 1 point from susan and loses 1 point from penny
 susan loses 2 points from penny and 1 point from sisi
 
-- [ ] Boat Ticket input
+- [x] Boat Ticket input
       New input box to enter a suit and a sequence. This designates what the friend of the dealer played that round to become friends with the dealer.
 
 ### Daily Goals
@@ -27,5 +27,6 @@ susan loses 2 points from penny and 1 point from sisi
 
 ##### 6/2/2026
 
-- [ ] Fix styles for inputs
-- [ ] Clear database and replace dealer team with boat tickets
+- [x] Fix styles for inputs
+- [x] Clear database and replace dealer team with boat tickets
+- [ ] Add visual indicator for sequence

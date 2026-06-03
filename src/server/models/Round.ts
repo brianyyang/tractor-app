@@ -5,7 +5,7 @@ import { IGame } from './Game';
 
 export interface IBoatTicket {
   player: IPlayer['name'];
-  card: String;
+  card: string;
   sequence: number;
 }
 
