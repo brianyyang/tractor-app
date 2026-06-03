@@ -1,3 +1,5 @@
+'use client';
+
 import { Button, Flex, Modal, Title } from '@mantine/core';
 
 interface DeleteGameModalProps {

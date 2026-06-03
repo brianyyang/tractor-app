@@ -1,4 +1,6 @@
-import { Box, Button } from '@mantine/core';
+'use client';
+
+import { Box, Button, Stack } from '@mantine/core';
 import { CSSProperties } from 'react';
 
 interface NewRoundButtonsProps {
@@ -34,7 +36,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
   } = props;
 
   return (
-    <Box>
+    <Stack align='center'>
       <Button
         variant='light'
         color='indigo'
@@ -71,6 +73,6 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
       >
         Delete Game
       </Button>
-    </Box>
+    </Stack>
   );
 };

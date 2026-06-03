@@ -59,7 +59,9 @@ export const RoundTable = ({ gameId }: RoundTableProps) => {
           {rounds.map((round) => (
             <Table.Tr key={round.roundId}>
               <Table.Td>{round.roundId}</Table.Td>
-              <Table.Td>{round.dealerTeam.join(', ')}</Table.Td>
+              <Table.Td>
+                {round.boatTickets.map((ticket) => ticket.player).join(', ')}
+              </Table.Td>
               <Table.Td>{round.otherTeam.join(', ')}</Table.Td>
               <Table.Td>{round.pointsScored}</Table.Td>
               <Table.Td>{round.dealer}</Table.Td>

@@ -3,7 +3,13 @@
 import { CSSProperties, useEffect, useState } from 'react';
 import { Button, Flex, Loader, Stack } from '@mantine/core';
 import { IconPlayCard, IconUsersPlus } from '@tabler/icons-react';
-import { Rank, rankToNumberValue, Suit } from '@/types/PlayingCard';
+import {
+  Rank,
+  rankOptions,
+  rankToNumberValue,
+  Suit,
+  suitOptions,
+} from '@/types/PlayingCard';
 import { StyledSelect } from '../../Selects/StyledSelect';
 import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
 import { GameState, useGame } from '@/client/contexts/GameContext';
@@ -12,33 +18,6 @@ import { fromIPlayer, Player } from '@/types/player';
 import { getAllPlayers } from '@/client/apis/playerAPI';
 import { PlayerData } from '@/pages/api/players';
 import { fromIGame } from '@/types/game';
-
-const rankOptions = Object.values(Rank).map((rank) => ({
-  value: rank,
-  label: rank,
-}));
-
-const suitOptions = Object.values(Suit).map((suit) => {
-  let symbol = '';
-  switch (suit) {
-    case Suit.Spades:
-      symbol = '♠';
-      break;
-    case Suit.Hearts:
-      symbol = '♥';
-      break;
-    case Suit.Diamonds:
-      symbol = '♦';
-      break;
-    case Suit.Clubs:
-      symbol = '♣';
-      break;
-  }
-  return {
-    value: suit,
-    label: `${suit} ${symbol}`,
-  };
-});
 
 const areFieldsValid = (
   startingRank: Rank | null,
@@ -84,7 +63,6 @@ export const NewGame = () => {
   const [startingSuit, setStartingSuit] = useState<Suit | null>(null);
 
   const submitButtonStyles = {
-    marginLeft: '1rem',
     marginTop: '2rem',
     pointerEvents: !areFieldsValid(startingRank, startingSuit, players)
       ? 'none'
@@ -122,12 +100,12 @@ export const NewGame = () => {
   return dataLoading ? (
     <Loader />
   ) : (
-    <Stack>
-      <Flex align='center' justify='space-between' style={{ margin: '0 1rem' }}>
+    <Stack align='center'>
+      <Flex justify='space-between' w='100%'>
         <b>Starting Card</b>
-        <IconPlayCard size={30} style={{ marginRight: '-5px' }} />
+        <IconPlayCard size={30} />
       </Flex>
-      <Flex align='center'>
+      <Flex align='center' justify='space-between' gap='md' w='100%'>
         <StyledSelect
           data={rankOptions}
           value={startingRank ? startingRank : null}
@@ -147,10 +125,11 @@ export const NewGame = () => {
       <Flex
         align='center'
         justify='space-between'
-        style={{ margin: '2rem 1rem 0 1rem' }}
+        style={{ margin: '1rem 0 0 0' }}
+        w='100%'
       >
         <b>Add Players</b>
-        <IconUsersPlus size={28} style={{ marginRight: '-4px' }} />
+        <IconUsersPlus size={28} />
       </Flex>
       <StyledMultiSelect
         data={availablePlayers.map((player) => player.name)}
@@ -161,7 +140,7 @@ export const NewGame = () => {
       <Button
         variant='light'
         color='indigo'
-        w={246}
+        w='100%'
         style={submitButtonStyles}
         onClick={() => {
           handleCreateGame();

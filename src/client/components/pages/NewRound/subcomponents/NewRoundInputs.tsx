@@ -1,51 +1,45 @@
+'use client';
+
 import { StyledMultiSelect } from '@/client/components/Selects/StyledMultiSelect';
 import { StyledSelect } from '@/client/components/Selects/StyledSelect';
 import { StyledTextInput } from '@/client/components/TextInputs/StyledTextInput';
 import { Player } from '@/types/player';
 import { Box } from '@mantine/core';
+import { BoatTicketInput } from './BoatTicketInput';
+import { BoatTicket } from '@/types/round';
 
 interface NewRoundInputsProps {
   players: Player[];
-  dealerTeam: Player[];
   otherTeam: Player[];
-  handleDealerTeamChange: (players: string[]) => void;
   pointsScored: string;
   setPointsScored: (points: string) => void;
   dealer: Player | undefined;
   setDealer: (player: Player | undefined) => void;
   dealerKey: number;
+  boatTickets: BoatTicket[];
+  setBoatTickets: (boatTickets: BoatTicket[]) => void;
 }
 
 export const NewRoundInputs = (props: NewRoundInputsProps) => {
   const {
     players,
-    dealerTeam,
     otherTeam,
-    handleDealerTeamChange,
     pointsScored,
     setPointsScored,
     dealer,
     setDealer,
     dealerKey,
+    boatTickets,
+    setBoatTickets,
   } = props;
   return (
     <Box>
-      <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-        <b>Dealer Team</b>
-      </div>
-      <StyledMultiSelect
-        data={players.map((player) => player.name)}
-        value={dealerTeam.map((player) => player.name)}
-        onChange={handleDealerTeamChange}
-        w={246}
-      />
       <div
         style={{
-          marginLeft: '1rem',
           marginTop: '2rem',
+          marginBottom: '1rem',
           display: 'flex',
           justifyContent: 'space-between',
-          width: '307.5px',
         }}
       >
         <b>Points Scored</b>
@@ -67,7 +61,11 @@ export const NewRoundInputs = (props: NewRoundInputsProps) => {
           }
         />
       </div>
-      <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
+      <BoatTicketInput
+        boatTickets={boatTickets}
+        setBoatTickets={setBoatTickets}
+      />
+      <div style={{ marginTop: '1rem', marginBottom: '1rem' }}>
         <b>Other Team</b>
       </div>
       <StyledMultiSelect

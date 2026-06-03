@@ -15,7 +15,17 @@ susan loses 2 points from penny and 1 point from sisi
 
 ### Daily Goals
 
-##### 4/3
+##### 4/3/2026
 
 - [x] Boat ticket schema added to Round schema
 - [x] Break up NewRound page into components (table, inputs, buttons)
+
+##### 4/4/2026
+
+- [x] Create boat ticket input component
+- [x] Create add button to add more boat tickets
+
+##### 6/2/2026
+
+- [ ] Fix styles for inputs
+- [ ] Clear database and replace dealer team with boat tickets

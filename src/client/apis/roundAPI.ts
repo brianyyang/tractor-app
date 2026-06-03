@@ -2,19 +2,20 @@
 import axios from 'axios';
 import { RoundData } from '@/pages/api/games/[gameId]/rounds';
 import { Player } from '@/types/player';
+import { BoatTicket } from '@/types/round';
 
 const API_URL = '/api/games/';
 
 // create a round for game
 export const createRound = async (
   gameId: number,
-  dealerTeam: Player[],
+  boatTickets: BoatTicket[],
   otherTeam: Player[],
   pointsScored: number,
   dealer: Player,
 ) => {
   const roundBody = {
-    dealerTeam: dealerTeam.map((player) => player.name),
+    boatTickets: boatTickets,
     otherTeam: otherTeam.map((player) => player.name),
     pointsScored: pointsScored,
     dealer: dealer.name,
@@ -32,14 +33,14 @@ export const createRound = async (
 export const editRound = async (
   gameId: number,
   roundNumber: number,
-  dealerTeam: Player[],
+  boatTickets: BoatTicket[],
   otherTeam: Player[],
   pointsScored: number,
   dealer: Player,
 ) => {
   const roundBody = {
     roundNumber: roundNumber,
-    dealerTeam: dealerTeam.map((player) => player.name),
+    boatTickets: boatTickets,
     otherTeam: otherTeam.map((player) => player.name),
     pointsScored: pointsScored,
     dealer: dealer.name,

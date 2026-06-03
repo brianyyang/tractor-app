@@ -5,7 +5,7 @@ import { Table } from '@mantine/core';
 import styles from '../Table.module.css';
 import { useGame } from '@/client/contexts/GameContext';
 import { Player } from '@/types/player';
-import { Round } from '@/types/round';
+import { BoatTicket, Round } from '@/types/round';
 import { PointCircle } from '../../PointCircles/PointCircle';
 
 interface PlayerRoundTableProps {
@@ -55,12 +55,7 @@ const createPlayerRows = (
         <Table.Td key={`${player.name}${round.roundId}score`}>
           <PointCircle
             isDealer={round.dealer === player.name}
-            isOnDealersTeam={
-              (round.dealerTeam.includes(round.dealer) &&
-                round.dealerTeam.includes(player.name)) ||
-              (round.otherTeam.includes(round.dealer) &&
-                round.otherTeam.includes(player.name))
-            }
+            isOnDealersTeam={isOnDealersTeam(round.boatTickets, player)}
           >
             {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
           </PointCircle>
@@ -79,6 +74,10 @@ const createPlayerRows = (
   return rows;
 };
 
+const isOnDealersTeam = (boatTickets: BoatTicket[], player: Player) => {
+  return boatTickets.some((ticket) => ticket.player === player.name);
+};
+
 const calculatePointsPerPlayer = (
   pastRounds: Round[],
   players: Player[],
@@ -88,21 +87,42 @@ const calculatePointsPerPlayer = (
   pastRounds.forEach((round) => {
     players.forEach((player) => {
       const isFirstRound = round.roundId === 1;
-      if (round.dealerTeam.includes(player.name)) {
-        pointsEarnedPerPlayer.set(
-          `${player.name}${round.roundId}`,
-          isFirstRound
-            ? startingRank + round.pointsScored
-            : pointsEarnedPerPlayer.get(`${player.name}${round.roundId - 1}`) +
-                round.pointsScored,
-        );
+      if (round.pointsScored >= 0) {
+        if (isOnDealersTeam(round.boatTickets, player)) {
+          pointsEarnedPerPlayer.set(
+            `${player.name}${round.roundId}`,
+            isFirstRound
+              ? startingRank + round.pointsScored
+              : pointsEarnedPerPlayer.get(
+                  `${player.name}${round.roundId - 1}`,
+                ) + round.pointsScored,
+          );
+        } else {
+          pointsEarnedPerPlayer.set(
+            `${player.name}${round.roundId}`,
+            isFirstRound
+              ? startingRank
+              : pointsEarnedPerPlayer.get(`${player.name}${round.roundId - 1}`),
+          );
+        }
       } else {
-        pointsEarnedPerPlayer.set(
-          `${player.name}${round.roundId}`,
-          isFirstRound
-            ? startingRank
-            : pointsEarnedPerPlayer.get(`${player.name}${round.roundId - 1}`),
-        );
+        if (isOnDealersTeam(round.boatTickets, player)) {
+          pointsEarnedPerPlayer.set(
+            `${player.name}${round.roundId}`,
+            isFirstRound
+              ? startingRank
+              : pointsEarnedPerPlayer.get(`${player.name}${round.roundId - 1}`),
+          );
+        } else {
+          pointsEarnedPerPlayer.set(
+            `${player.name}${round.roundId}`,
+            isFirstRound
+              ? startingRank - round.pointsScored
+              : pointsEarnedPerPlayer.get(
+                  `${player.name}${round.roundId - 1}`,
+                ) - round.pointsScored,
+          );
+        }
       }
     });
   });
@@ -152,7 +172,7 @@ export const PlayerRoundTable = ({
               <Table.Td
                 key={round.roundId}
                 className={styles.editRound}
-                onClick={() => setRoundNumber(index + 1)}
+                onClick={() => isGameEnded ?? setRoundNumber(index + 1)}
               >
                 {index + 1}
               </Table.Td>

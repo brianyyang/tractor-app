@@ -1,3 +1,5 @@
+'use client';
+
 import { GameState, useGame } from '@/client/contexts/GameContext';
 import { Stack, Title, Button } from '@mantine/core';
 

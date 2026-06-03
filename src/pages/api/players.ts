@@ -57,8 +57,9 @@ export default async function handler(
 
         await Round.deleteMany({
           $or: [
-            { dealerTeam: { $in: playersToDelete } },
+            { 'boatTickets.player': { $in: playersToDelete } },
             { otherTeam: { $in: playersToDelete } },
+            { dealer: { $in: playersToDelete } },
           ],
         });
 

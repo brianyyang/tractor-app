@@ -26,8 +26,7 @@ export const ManagePlayers = () => {
   const [deleteModalOpen, { close, open }] = useDisclosure(false);
 
   const submitButtonStyles = {
-    marginLeft: '1rem',
-    marginTop: '2rem',
+    marginTop: '1rem',
   } as CSSProperties;
 
   useEffect(() => {
@@ -95,7 +94,7 @@ export const ManagePlayers = () => {
       <Button
         variant='light'
         color='indigo'
-        w={246}
+        w='100%'
         style={submitButtonStyles}
         onClick={() => {
           setErrorMsg('');
@@ -106,30 +105,26 @@ export const ManagePlayers = () => {
       </Button>
     </Stack>
   ) : (
-    <Stack>
+    <Stack align='center'>
       {responseMsg && (
-        <Title order={4} m={'0 0 0 1rem'}>
+        <Title order={4} mb='1rem'>
           {responseMsg}
         </Title>
       )}
-      <Flex
-        align='center'
-        justify='space-between'
-        style={{ margin: '2rem 1rem 0 1rem' }}
-      >
+      <Flex align='center' justify='space-between' mt='1rem' w='100%'>
         <b>Player Name</b>
-        <IconUsersPlus size={28} style={{ marginRight: '-4px' }} />
+        <IconUsersPlus size={28} />
       </Flex>
       <StyledTextInput
         value={playerName}
         onChange={(e) => setPlayerName(e.target.value)}
-        w={246}
-        style={{ margin: '1rem 1rem 0 1rem' }}
+        w='100%'
+        mt='1rem'
       />
       <Button
         variant='light'
         color='indigo'
-        w={246}
+        w='100%'
         style={submitButtonStyles}
         onClick={() => {
           handleAddPlayer();
@@ -138,13 +133,9 @@ export const ManagePlayers = () => {
         Add Player
       </Button>
 
-      <Flex
-        align='center'
-        justify='space-between'
-        style={{ margin: '2rem 1rem 0 1rem' }}
-      >
+      <Flex align='center' justify='space-between' mt='1rem' w='100%'>
         <b>Player Names</b>
-        <IconUsersPlus size={28} style={{ marginRight: '-4px' }} />
+        <IconUsersPlus size={28} />
       </Flex>
       <StyledMultiSelect
         data={availablePlayers.map((player) => player.name)}
@@ -155,12 +146,11 @@ export const ManagePlayers = () => {
       <Button
         variant='light'
         color='indigo'
-        w={246}
+        w='100%'
         style={submitButtonStyles}
         onClick={() => {
           open();
         }}
-        mb='2rem'
       >
         Delete Players
       </Button>

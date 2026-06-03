@@ -21,7 +21,6 @@ const BoatTicketSchema = new Schema<IBoatTicket>(
 export interface IRound extends Document {
   gameId: IGame['gameId'];
   roundId: number;
-  dealerTeam: IPlayer['name'][];
   otherTeam: IPlayer['name'][];
   pointsScored: number;
   dealer: IPlayer['name'];
@@ -32,7 +31,6 @@ const RoundSchema = new Schema<IRound>({
   gameId: { type: Schema.Types.Number, ref: 'Game', required: true },
   roundId: { type: Number },
   pointsScored: { type: Number, required: true },
-  dealerTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
   otherTeam: [{ type: Schema.Types.String, ref: 'Player', required: true }],
   dealer: { type: Schema.Types.String, ref: 'Player', required: true },
   boatTickets: { type: [BoatTicketSchema], default: [] },

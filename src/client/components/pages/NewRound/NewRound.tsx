@@ -9,7 +9,7 @@ import {
   editRound,
   getAllRoundsByID,
 } from '@/client/apis/roundAPI';
-import { fromIRound, Round } from '@/types/round';
+import { BoatTicket, fromIRound, Round } from '@/types/round';
 import { PlayerRoundTable } from '../../Tables/PlayerRoundTable/PlayerRoundTable';
 import { RoundTable } from '../../Tables/RoundTable/RoundTable';
 import { deleteGameById, endGameById } from '@/client/apis/gameAPI';
@@ -32,10 +32,12 @@ export const NewRound = () => {
     setGameEnded,
     clearGameState,
   } = useGame();
-  const [dealerTeam, setDealerTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
   const [dealer, setDealer] = useState<Player>();
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
+  const [boatTickets, setBoatTickets] = useState<BoatTicket[]>([
+    { player: '', card: '', sequence: '' },
+  ]);
   const [showGameDetails, setShowGameDetails] = useState<boolean>(false);
   const [endModalOpen, { close: closeEnd, open: openEnd }] =
     useDisclosure(false);
@@ -67,29 +69,21 @@ export const NewRound = () => {
   useEffect(() => {
     if (isEditingRound) {
       const roundToEdit = rounds[roundNumber - 1];
-      setDealerTeam(
-        players.filter((player) =>
-          roundToEdit.dealerTeam.includes(player.name),
-        ),
-      );
       setPointsScored(String(roundToEdit.pointsScored));
       setDealer(players.find((player) => player.name === roundToEdit.dealer));
+      setBoatTickets(roundToEdit.boatTickets);
     }
   }, [isEditingRound, roundNumber]);
 
   const otherTeam = useMemo(() => {
-    return players.filter((player) => !dealerTeam.includes(player));
-  }, [dealerTeam]);
-
-  const handleDealerTeamChange = (values: string[]) => {
-    const selectedPlayers = players.filter((player) =>
-      values.includes(player.name),
+    return players.filter(
+      (player) =>
+        !boatTickets.map((ticket) => ticket.player).includes(player.name),
     );
-    setDealerTeam(selectedPlayers);
-  };
+  }, [boatTickets]);
 
   const resetRoundFields = () => {
-    setDealerTeam([]);
+    setBoatTickets([{ player: '', card: '', sequence: '' }]);
     setPointsScored('0');
     setDealer(undefined);
     setDealerKey((k) => k + 1);
@@ -98,10 +92,10 @@ export const NewRound = () => {
   const submitButtonStyles = {
     marginLeft: '1rem',
     marginTop: '2rem',
-    pointerEvents: !areFieldsValid(dealerTeam, otherTeam, pointsScored, dealer)
+    pointerEvents: !areFieldsValid(boatTickets, otherTeam, pointsScored, dealer)
       ? 'none'
       : undefined,
-    opacity: !areFieldsValid(dealerTeam, otherTeam, pointsScored, dealer)
+    opacity: !areFieldsValid(boatTickets, otherTeam, pointsScored, dealer)
       ? '0.8'
       : '1',
   } as CSSProperties;
@@ -113,10 +107,10 @@ export const NewRound = () => {
 
   const handleCreateRound = async () => {
     try {
-      if (dealerTeam.length > 0 && dealer) {
+      if (boatTickets.length > 0 && dealer) {
         const roundData = await createRound(
           gameId,
-          dealerTeam,
+          boatTickets,
           otherTeam,
           Number(pointsScored),
           dealer,
@@ -135,11 +129,11 @@ export const NewRound = () => {
 
   const handleEditRound = async () => {
     try {
-      if (dealerTeam.length > 0 && dealer) {
+      if (boatTickets.length > 0 && dealer) {
         const roundData = await editRound(
           gameId,
           roundNumber,
-          dealerTeam,
+          boatTickets,
           otherTeam,
           Number(pointsScored),
           dealer,
@@ -175,7 +169,7 @@ export const NewRound = () => {
   };
 
   return (
-    <Stack>
+    <Stack align='center'>
       {gameDeleted ? (
         <DeletedGame />
       ) : showGameDetails ? (
@@ -202,14 +196,14 @@ export const NewRound = () => {
         <>
           <NewRoundInputs
             players={players}
-            dealerTeam={dealerTeam}
             otherTeam={otherTeam}
-            handleDealerTeamChange={handleDealerTeamChange}
             pointsScored={pointsScored}
             setPointsScored={setPointsScored}
             dealer={dealer}
             setDealer={setDealer}
             dealerKey={dealerKey}
+            boatTickets={boatTickets}
+            setBoatTickets={setBoatTickets}
           />
           <NewRoundButtons
             isEditingRound={isEditingRound}
