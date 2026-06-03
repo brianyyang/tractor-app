@@ -2,19 +2,20 @@
 import axios from 'axios';
 import { RoundData } from '@/pages/api/games/[gameId]/rounds';
 import { Player } from '@/types/player';
+import { BoatTicket } from '@/types/round';
 
 const API_URL = '/api/games/';
 
 // create a round for game
 export const createRound = async (
   gameId: number,
-  winningTeam: Player[],
+  boatTickets: BoatTicket[],
   otherTeam: Player[],
   pointsScored: number,
   dealer: Player,
 ) => {
   const roundBody = {
-    winningTeam: winningTeam.map((player) => player.name),
+    boatTickets: boatTickets,
     otherTeam: otherTeam.map((player) => player.name),
     pointsScored: pointsScored,
     dealer: dealer.name,
@@ -25,6 +26,34 @@ export const createRound = async (
     return data;
   } catch (error: any) {
     throw new Error(error.response?.data?.message || 'Failed to create round');
+  }
+};
+
+// edit a round for a game
+export const editRound = async (
+  gameId: number,
+  roundNumber: number,
+  boatTickets: BoatTicket[],
+  otherTeam: Player[],
+  pointsScored: number,
+  dealer: Player,
+) => {
+  const roundBody = {
+    roundNumber: roundNumber,
+    boatTickets: boatTickets,
+    otherTeam: otherTeam.map((player) => player.name),
+    pointsScored: pointsScored,
+    dealer: dealer.name,
+  };
+  try {
+    const response = await axios.patch(
+      `${API_URL}/${gameId}/rounds`,
+      roundBody,
+    );
+    const data: RoundData = response.data;
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to edit round');
   }
 };
 

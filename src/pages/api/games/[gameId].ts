@@ -31,6 +31,20 @@ export default async function handler(
         return res.status(500).json({ message: 'Failed to fetch game' });
       }
 
+    case 'POST': // end a game by its ID
+      try {
+        await Game.updateOne(
+          {
+            gameId: gameId,
+          },
+          { $set: { isEnded: true } },
+        );
+        return res.status(200).json({ message: 'Successfully ended game' });
+      } catch (error) {
+        console.error('Error ending game:', error);
+        return res.status(500).json({ message: 'Failed to end game' });
+      }
+
     case 'DELETE': // delete a game
       try {
         // Delete all rounds for this game first

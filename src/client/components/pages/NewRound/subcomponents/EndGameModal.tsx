@@ -1,7 +1,9 @@
+'use client';
+
 import { Button, Flex, Modal, Title } from '@mantine/core';
 
-interface DeleteGameModalProps {
-  handleDeleteGame: () => void;
+interface EndGameModalProps {
+  handleEndGame: () => void;
   isOpened: boolean;
   close: () => void;
 }
@@ -11,11 +13,11 @@ const buttonStyles = {
   padding: '0px 1rem',
 };
 
-export const DeleteGameModal = ({
-  handleDeleteGame,
+export const EndGameModal = ({
+  handleEndGame,
   isOpened,
   close,
-}: DeleteGameModalProps) => {
+}: EndGameModalProps) => {
   return (
     <Modal
       opened={isOpened}
@@ -33,14 +35,14 @@ export const DeleteGameModal = ({
       }}
     >
       <Title order={6}>
-        Are you sure you want to delete this game? This will delete all rounds
-        for the game too.
+        Are you sure you want to end this game? You will not be able to add new
+        rounds, but you will still be able to edit old rounds.
       </Title>
       <Flex justify='center'>
         <Button style={buttonStyles} onClick={close}>
           Cancel
         </Button>
-        <Button style={buttonStyles} onClick={handleDeleteGame}>
+        <Button style={buttonStyles} onClick={handleEndGame}>
           Confirm
         </Button>
       </Flex>

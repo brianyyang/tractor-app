@@ -21,6 +21,7 @@ export const ResumeGame = () => {
     setRoundNumber,
     setPlayers,
     setStartingRank,
+    setGameEnded,
   } = useGame();
   const [errorMsg, setErrorMsg] = useState('');
   const [availablePlayers, setAvailablePlayers] = useState<Player[]>([]);
@@ -61,6 +62,7 @@ export const ResumeGame = () => {
           ) as Player[],
         );
         setStartingRank(rankToNumberValue(gameToResume.startingCard.rank));
+        setGameEnded(gameToResume.isEnded);
         setGameState(GameState.NewRound);
       }
     } catch (err: any) {

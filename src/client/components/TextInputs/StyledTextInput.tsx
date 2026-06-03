@@ -1,5 +1,4 @@
 import { CSSProperties, TextInput, TextInputProps } from '@mantine/core';
-import { IconChevronDown } from '@tabler/icons-react';
 
 type StyledTextInputProps = TextInputProps & {
   styleOverrides?: CSSProperties;

@@ -47,7 +47,7 @@ export const HomePage = () => {
             </Button>
             <Button
               className={styles.button}
-              style={{ width: '50%' }}
+              style={{ width: '60%' }}
               variant='light'
               color='indigo'
               onClick={() => setGameState(GameState.ManagePlayers)}

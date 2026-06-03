@@ -48,6 +48,17 @@ export const getGamesPaginated = async (pageNumber: number) => {
   }
 };
 
+// end game by ID
+export const endGameById = async (gameId: string) => {
+  try {
+    const response = await axios.post(`${API_URL}/${gameId}`);
+    const data: GameData = response.data;
+    return data;
+  } catch (error: any) {
+    throw new Error(error.response?.data?.message || 'Failed to end game');
+  }
+};
+
 // deletes a game and the associated rounds by ID
 export const deleteGameById = async (gameId: string) => {
   try {

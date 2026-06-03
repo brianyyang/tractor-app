@@ -1,35 +1,25 @@
 'use client';
 
 import { CSSProperties, useEffect, useMemo, useState } from 'react';
-import { Button, Center, Loader, Stack, Title } from '@mantine/core';
-import { GameState, useGame } from '@/client/contexts/GameContext';
-import { StyledMultiSelect } from '../../Selects/StyledMultiSelect';
-import { StyledSelect } from '../../Selects/StyledSelect';
+import { Button, Stack } from '@mantine/core';
+import { useGame } from '@/client/contexts/GameContext';
 import { Player } from '@/types/player';
-import { createRound, getAllRoundsByID } from '@/client/apis/roundAPI';
-import { fromIRound, Round } from '@/types/round';
+import {
+  createRound,
+  editRound,
+  getAllRoundsByID,
+} from '@/client/apis/roundAPI';
+import { BoatTicket, fromIRound, Round } from '@/types/round';
 import { PlayerRoundTable } from '../../Tables/PlayerRoundTable/PlayerRoundTable';
 import { RoundTable } from '../../Tables/RoundTable/RoundTable';
-import { deleteGameById } from '@/client/apis/gameAPI';
+import { deleteGameById, endGameById } from '@/client/apis/gameAPI';
 import { useDisclosure } from '@mantine/hooks';
-import { DeleteGameModal } from './DeleteGameModal';
-
-const areFieldsValid = (
-  winningTeam: Player[],
-  otherTeam: Player[],
-  pointsScored: string,
-  dealer: Player | undefined,
-) => {
-  return !(
-    winningTeam.length === 0 ||
-    otherTeam.length === 0 ||
-    (pointsScored !== '0' &&
-      pointsScored !== '1' &&
-      pointsScored !== '2' &&
-      pointsScored !== '3') ||
-    dealer === undefined
-  );
-};
+import { DeleteGameModal } from './subcomponents/DeleteGameModal';
+import { EndGameModal } from './subcomponents/EndGameModal';
+import { areFieldsValid } from './NewRoundUtils';
+import { DeletedGame } from './subcomponents/DeletedGame';
+import { NewRoundInputs } from './subcomponents/NewRoundInputs';
+import { NewRoundButtons } from './subcomponents/NewRoundButtons';
 
 export const NewRound = () => {
   const {
@@ -38,21 +28,35 @@ export const NewRound = () => {
     roundNumber,
     setRoundNumber,
     startingRank,
-    setGameState,
+    gameEnded,
+    setGameEnded,
     clearGameState,
   } = useGame();
-  const [winningTeam, setWinningTeam] = useState<Player[]>([]);
   const [pointsScored, setPointsScored] = useState<string>('0');
   const [dealer, setDealer] = useState<Player>();
   const [dealerKey, setDealerKey] = useState<number>(0); // used to remount component on submit
+  const [boatTickets, setBoatTickets] = useState<BoatTicket[]>([
+    { player: '', card: '', sequence: '' },
+  ]);
   const [showGameDetails, setShowGameDetails] = useState<boolean>(false);
-  const [deleteModalOpen, { close, open }] = useDisclosure(false);
+  const [endModalOpen, { close: closeEnd, open: openEnd }] =
+    useDisclosure(false);
+  const [deleteModalOpen, { close: closeDelete, open: openDelete }] =
+    useDisclosure(false);
   const [gameDeleted, setGameDeleted] = useState<boolean>(false);
 
   const [rounds, setRounds] = useState<Round[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const isEditingRound = useMemo(() => {
+    return !loading && !gameDeleted && roundNumber !== rounds.length + 1;
+  }, [roundNumber, rounds]);
+
   useEffect(() => {
+    handleLoadRounds();
+  }, [gameId, roundNumber]);
+
+  const handleLoadRounds = () => {
     getAllRoundsByID(gameId)
       .then((data) => {
         if (data.rounds) {
@@ -60,21 +64,26 @@ export const NewRound = () => {
         }
       })
       .finally(() => setLoading(false));
-  }, [gameId, roundNumber]);
-
-  const otherTeam = useMemo(() => {
-    return players.filter((player) => !winningTeam.includes(player));
-  }, [winningTeam]);
-
-  const handleWinningTeamChange = (values: string[]) => {
-    const selectedPlayers = players.filter((player) =>
-      values.includes(player.name),
-    );
-    setWinningTeam(selectedPlayers);
   };
 
+  useEffect(() => {
+    if (isEditingRound) {
+      const roundToEdit = rounds[roundNumber - 1];
+      setPointsScored(String(roundToEdit.pointsScored));
+      setDealer(players.find((player) => player.name === roundToEdit.dealer));
+      setBoatTickets(roundToEdit.boatTickets);
+    }
+  }, [isEditingRound, roundNumber]);
+
+  const otherTeam = useMemo(() => {
+    return players.filter(
+      (player) =>
+        !boatTickets.map((ticket) => ticket.player).includes(player.name),
+    );
+  }, [boatTickets]);
+
   const resetRoundFields = () => {
-    setWinningTeam([]);
+    setBoatTickets([{ player: '', card: '', sequence: '' }]);
     setPointsScored('0');
     setDealer(undefined);
     setDealerKey((k) => k + 1);
@@ -83,10 +92,10 @@ export const NewRound = () => {
   const submitButtonStyles = {
     marginLeft: '1rem',
     marginTop: '2rem',
-    pointerEvents: !areFieldsValid(winningTeam, otherTeam, pointsScored, dealer)
+    pointerEvents: !areFieldsValid(boatTickets, otherTeam, pointsScored, dealer)
       ? 'none'
       : undefined,
-    opacity: !areFieldsValid(winningTeam, otherTeam, pointsScored, dealer)
+    opacity: !areFieldsValid(boatTickets, otherTeam, pointsScored, dealer)
       ? '0.8'
       : '1',
   } as CSSProperties;
@@ -96,18 +105,12 @@ export const NewRound = () => {
     marginTop: '1rem',
   };
 
-  const deleteGameButtonStyles = {
-    marginLeft: '1rem',
-    marginTop: '1rem',
-    marginBottom: '2rem',
-  };
-
   const handleCreateRound = async () => {
     try {
-      if (winningTeam.length > 0 && dealer) {
+      if (boatTickets.length > 0 && dealer) {
         const roundData = await createRound(
           gameId,
-          winningTeam,
+          boatTickets,
           otherTeam,
           Number(pointsScored),
           dealer,
@@ -115,11 +118,41 @@ export const NewRound = () => {
         if (roundData.round) {
           const createdRound = fromIRound(roundData.round);
           setRoundNumber(createdRound.roundId + 1);
+          setLoading(true);
           resetRoundFields();
         }
       }
     } catch (err) {
       console.error('Error creating round:', err);
+    }
+  };
+
+  const handleEditRound = async () => {
+    try {
+      if (boatTickets.length > 0 && dealer) {
+        const roundData = await editRound(
+          gameId,
+          roundNumber,
+          boatTickets,
+          otherTeam,
+          Number(pointsScored),
+          dealer,
+        );
+        if (roundData.round) {
+          handleLoadRounds();
+        }
+      }
+    } catch (err) {
+      console.error('Error editing round:', err);
+    }
+  };
+
+  const handleEndGame = async () => {
+    try {
+      await endGameById(String(gameId));
+      setGameEnded(true);
+    } catch (err) {
+      console.error('Error deleting game:', err);
     }
   };
 
@@ -136,22 +169,9 @@ export const NewRound = () => {
   };
 
   return (
-    <Stack>
+    <Stack align='center'>
       {gameDeleted ? (
-        <Stack align='center'>
-          <Title order={4}>Game deleted successfully!</Title>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={showDetailsButtonStyles}
-            onClick={() => {
-              setGameState(GameState.Home);
-            }}
-          >
-            Return to Homepage
-          </Button>
-        </Stack>
+        <DeletedGame />
       ) : showGameDetails ? (
         <>
           <RoundTable gameId={gameId} />
@@ -165,93 +185,44 @@ export const NewRound = () => {
             Back
           </Button>
         </>
-      ) : loading ? (
-        <Center mt='xl'>
-          <Loader />
-        </Center>
       ) : (
-        <PlayerRoundTable pastRounds={rounds} startingRank={startingRank} />
+        <PlayerRoundTable
+          pastRounds={rounds}
+          startingRank={startingRank}
+          isGameEnded={gameEnded}
+        />
       )}
-      {!showGameDetails && !gameDeleted && (
+      {!showGameDetails && !gameDeleted && !gameEnded && (
         <>
-          <div style={{ marginLeft: '1rem', marginTop: '1rem' }}>
-            <b>Winning Team</b>
-          </div>
-          <StyledMultiSelect
-            data={players.map((player) => player.name)}
-            value={winningTeam.map((player) => player.name)}
-            onChange={handleWinningTeamChange}
-            w={246}
+          <NewRoundInputs
+            players={players}
+            otherTeam={otherTeam}
+            pointsScored={pointsScored}
+            setPointsScored={setPointsScored}
+            dealer={dealer}
+            setDealer={setDealer}
+            dealerKey={dealerKey}
+            boatTickets={boatTickets}
+            setBoatTickets={setBoatTickets}
           />
-          <div
-            style={{
-              marginLeft: '1rem',
-              marginTop: '2rem',
-              display: 'flex',
-              justifyContent: 'space-between',
-              width: '307.5px',
-            }}
-          >
-            <b>Points Scored</b>
-            <b>Dealer</b>
-          </div>
-          <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-            <StyledSelect
-              data={['0', '1', '2', '3']}
-              value={pointsScored}
-              w={80}
-              onChange={(value) => setPointsScored(value || '0')}
-            />
-            <StyledSelect
-              key={dealerKey}
-              data={players.map((player) => player.name)}
-              value={dealer ? dealer.name : ''}
-              w={130}
-              onChange={(value) =>
-                setDealer(players.find((player) => player.name === value))
-              }
-            />
-          </div>
-          <div style={{ marginLeft: '1rem', marginTop: '2rem' }}>
-            <b>Other Team</b>
-          </div>
-          <StyledMultiSelect
-            data={players.map((player) => player.name)}
-            value={otherTeam.map((player) => player.name)}
-            w={246}
-            disabled
+          <NewRoundButtons
+            isEditingRound={isEditingRound}
+            handleEditRound={handleEditRound}
+            handleCreateRound={handleCreateRound}
+            setShowGameDetails={setShowGameDetails}
+            openEnd={openEnd}
+            openDelete={openDelete}
+            submitButtonStyles={submitButtonStyles}
           />
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={submitButtonStyles}
-            onClick={handleCreateRound}
-          >
-            Add Round
-          </Button>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={showDetailsButtonStyles}
-            onClick={() => setShowGameDetails(true)}
-          >
-            Show Game Details
-          </Button>
-          <Button
-            variant='light'
-            color='indigo'
-            w={246}
-            style={deleteGameButtonStyles}
-            onClick={open}
-          >
-            Delete Game
-          </Button>
+          <EndGameModal
+            handleEndGame={handleEndGame}
+            isOpened={endModalOpen}
+            close={closeEnd}
+          />
           <DeleteGameModal
             handleDeleteGame={handleDeleteGame}
             isOpened={deleteModalOpen}
-            close={close}
+            close={closeDelete}
           />
         </>
       )}

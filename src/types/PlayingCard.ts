@@ -71,3 +71,30 @@ export const rankToNumberValue = (rank: Rank) => {
       return 14;
   }
 };
+
+export const rankOptions = Object.values(Rank).map((rank) => ({
+  value: rank,
+  label: rank,
+}));
+
+export const suitOptions = Object.values(Suit).map((suit) => {
+  let symbol = '';
+  switch (suit) {
+    case Suit.Spades:
+      symbol = '♠';
+      break;
+    case Suit.Hearts:
+      symbol = '♥';
+      break;
+    case Suit.Diamonds:
+      symbol = '♦';
+      break;
+    case Suit.Clubs:
+      symbol = '♣';
+      break;
+  }
+  return {
+    value: suit,
+    label: `${suit} ${symbol}`,
+  };
+});

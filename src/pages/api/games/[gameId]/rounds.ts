@@ -15,13 +15,12 @@ export default async function handler(
 ) {
   await connectToDatabase();
   const gameId = req.query.gameId;
+  const { boatTickets, otherTeam, pointsScored, dealer } = req.body;
 
   switch (req.method) {
     case 'POST': // create a new round
-      const { winningTeam, otherTeam, pointsScored, dealer } = req.body;
-
       if (
-        !winningTeam ||
+        !boatTickets ||
         !otherTeam ||
         (pointsScored !== 0 && !pointsScored) ||
         !dealer
@@ -32,7 +31,7 @@ export default async function handler(
       try {
         const round = new Round({
           gameId: gameId,
-          winningTeam: winningTeam,
+          boatTickets: boatTickets,
           otherTeam: otherTeam,
           pointsScored: pointsScored,
           dealer: dealer,
@@ -42,6 +41,47 @@ export default async function handler(
         return res
           .status(201)
           .json({ message: 'Round created successfully', round: savedRound });
+      } catch (error: any) {
+        return res
+          .status(500)
+          .json({ message: 'Error creating round: ' + error.message });
+      }
+
+    case 'PATCH': // edit an existing round
+      if (
+        !boatTickets ||
+        !otherTeam ||
+        (pointsScored !== 0 && !pointsScored) ||
+        !dealer
+      ) {
+        return res.status(400).json({ message: 'Missing required fields' });
+      }
+      const { roundNumber } = req.body;
+      try {
+        const editedRound = await Round.findOneAndUpdate(
+          {
+            gameId: gameId,
+            roundId: roundNumber,
+          },
+          {
+            $set: {
+              boatTickets: boatTickets,
+              otherTeam: otherTeam,
+              pointsScored: pointsScored,
+              dealer: dealer,
+            },
+          },
+        );
+
+        if (editedRound) {
+          return res
+            .status(201)
+            .json({ message: 'Round edited successfully', round: editedRound });
+        } else {
+          return res
+            .status(500)
+            .json({ message: 'Error editing round: round not found' });
+        }
       } catch (error: any) {
         return res
           .status(500)

@@ -23,6 +23,8 @@ interface GameContextType {
   setStartingRank: (rank: number) => void;
   roundNumber: number;
   setRoundNumber: (round: number) => void;
+  gameEnded: boolean;
+  setGameEnded: (isGameEnded: boolean) => void;
   clearGameState: () => void;
 }
 
@@ -34,11 +36,13 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
   const [players, setPlayers] = useState<Player[]>([]);
   const [roundNumber, setRoundNumber] = useState<number>(0);
   const [startingRank, setStartingRank] = useState<number>(0);
+  const [gameEnded, setGameEnded] = useState<boolean>(false);
 
   const clearGameState = () => {
     setGameId(0);
     setPlayers([]);
     setRoundNumber(0);
+    setStartingRank(0);
   };
 
   return (
@@ -54,6 +58,8 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
         setStartingRank,
         roundNumber,
         setRoundNumber,
+        gameEnded,
+        setGameEnded,
         clearGameState,
       }}
     >

@@ -17,11 +17,10 @@ export const PointCircle = ({
     <div
       style={{
         border: isOnDealersTeam ? '2px solid #8ba2ff' : 'none',
-        borderRadius: '50%',
+        borderRadius: isDealer ? '10% ' : '50%',
         padding: '10px 20px',
         display: 'inline-block',
         textAlign: 'center',
-        boxShadow: isDealer ? 'inset 0 0 0 2px #8ba2ff' : 'none',
       }}
     >
       {children}

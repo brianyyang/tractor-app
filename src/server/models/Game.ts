@@ -7,6 +7,7 @@ export interface IGame extends Document {
   startingCard: string;
   date: Date;
   players: IPlayer['name'][];
+  isEnded: boolean;
 }
 
 const GameSchema = new Schema<IGame>({
@@ -14,6 +15,7 @@ const GameSchema = new Schema<IGame>({
   startingCard: { type: String },
   date: { type: Date, default: Date.now },
   players: [{ type: Schema.Types.String, ref: 'Player', required: true }],
+  isEnded: { type: Boolean, default: false },
 });
 
 // before saving a new Game, increment the counter and populate the game ID
@@ -22,7 +24,7 @@ GameSchema.pre<IGame>('save', async function (next) {
     const counter = await Counter.findOneAndUpdate(
       { name: 'gameId' },
       { $inc: { seq: 1 } },
-      { new: true, upsert: true }
+      { new: true, upsert: true },
     );
 
     this.gameId = counter.seq;
