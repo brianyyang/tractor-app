@@ -13,6 +13,15 @@ susan loses 2 points from penny and 1 point from sisi
 - [x] Boat Ticket input
       New input box to enter a suit and a sequence. This designates what the friend of the dealer played that round to become friends with the dealer.
 
+- [ ] Change theme - Background light green - Text black
+
+- [ ] Visual indicator for boat ticket card and sequence
+
+# Bugs to Fix
+
+- [ ] Editing rounds
+- [ ] Other team includes dealer
+
 ### Daily Goals
 
 ##### 4/3/2026
