@@ -56,6 +56,13 @@ const createPlayerRows = (
           <PointCircle
             isDealer={round.dealer === player.name}
             isOnDealersTeam={isOnDealersTeam(round.boatTickets, player)}
+            boatTicket={
+              isOnDealersTeam(round.boatTickets, player)
+                ? round.boatTickets.find(
+                    (ticket) => ticket.player === player.name,
+                  )
+                : undefined
+            }
           >
             {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
           </PointCircle>
@@ -163,7 +170,7 @@ export const PlayerRoundTable = ({
 
   return (
     <div style={scrollingDivStyles}>
-      <Table withColumnBorders className={styles.table} variant='vertical'>
+      <Table withColumnBorders className={styles.table} variant="vertical">
         <Table.Tbody>
           <Table.Tr ta={'center'}>
             <Table.Th style={stickyHeaderStyles}>Round</Table.Th>

@@ -8,9 +8,9 @@ export const areFieldsValid = (
   dealer: Player | undefined,
 ) => {
   return !(
-    boatTickets.length < 2 ||
+    boatTickets.length < 1 ||
     !boatTickets.every(isValidBoatTicket) ||
-    otherTeam.length < 2 ||
+    otherTeam.length < 1 ||
     !isValidInteger(pointsScored) ||
     dealer === undefined
   );

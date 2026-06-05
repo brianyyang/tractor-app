@@ -78,9 +78,10 @@ export const NewRound = () => {
   const otherTeam = useMemo(() => {
     return players.filter(
       (player) =>
+        dealer?.name !== player.name &&
         !boatTickets.map((ticket) => ticket.player).includes(player.name),
     );
-  }, [boatTickets]);
+  }, [boatTickets, dealer]);
 
   const resetRoundFields = () => {
     setBoatTickets([{ player: '', card: '', sequence: '' }]);
@@ -160,7 +161,7 @@ export const NewRound = () => {
     try {
       await deleteGameById(String(gameId));
       resetRoundFields();
-      close();
+      closeDelete();
       clearGameState();
       setGameDeleted(true);
     } catch (err) {
@@ -169,15 +170,15 @@ export const NewRound = () => {
   };
 
   return (
-    <Stack align='center'>
+    <Stack align="center">
       {gameDeleted ? (
         <DeletedGame />
       ) : showGameDetails ? (
         <>
           <RoundTable gameId={gameId} />
           <Button
-            variant='light'
-            color='indigo'
+            variant="light"
+            color="indigo"
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(false)}

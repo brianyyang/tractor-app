@@ -20,7 +20,9 @@ susan loses 2 points from penny and 1 point from sisi
 # Bugs to Fix
 
 - [ ] Editing rounds
-- [ ] Other team includes dealer
+- [x] Other team includes dealer
+- [x] Loading game that has finished then creating a new game makes new game finished
+- [x] Deleting game closes the window
 
 ### Daily Goals
 
@@ -38,4 +40,8 @@ susan loses 2 points from penny and 1 point from sisi
 
 - [x] Fix styles for inputs
 - [x] Clear database and replace dealer team with boat tickets
-- [ ] Add visual indicator for sequence
+
+#### 6/5/2026
+
+- [x] Add visual indicator for boat ticket card
+- [x] Bugfixes

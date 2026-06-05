@@ -43,6 +43,7 @@ export const GameProvider = ({ children }: { children: ReactNode }) => {
     setPlayers([]);
     setRoundNumber(0);
     setStartingRank(0);
+    setGameEnded(false);
   };
 
   return (

@@ -27,8 +27,59 @@ export enum Rank {
   Joker = 'joker',
 }
 
+const suitToSymbol = (suit: string) => {
+  switch (suit) {
+    case Suit.Spades:
+      return '♠';
+    case Suit.Hearts:
+      return '♥';
+    case Suit.Diamonds:
+      return '♦';
+    case Suit.Clubs:
+      return '♣';
+  }
+};
+
+const rankToInitial = (rank: Rank) => {
+  switch (rank) {
+    case Rank.Ace:
+      return 'A';
+    case Rank.Two:
+      return '2';
+    case Rank.Three:
+      return '3';
+    case Rank.Four:
+      return '4';
+    case Rank.Five:
+      return '5';
+    case Rank.Six:
+      return '6';
+    case Rank.Seven:
+      return '7';
+    case Rank.Eight:
+      return '8';
+    case Rank.Nine:
+      return '9';
+    case Rank.Ten:
+      return '10';
+    case Rank.Jack:
+      return 'Ja';
+    case Rank.Queen:
+      return 'Q';
+    case Rank.King:
+      return 'K';
+    case Rank.Joker:
+      return 'Jo';
+  }
+};
+
 export const playingCardToString = (card: PlayingCard) => {
   return `${card.rank} of ${card.suit}`;
+};
+
+export const stringToShortString = (card: string) => {
+  const playingCard = stringToPlayingCard(card);
+  return `${rankToInitial(playingCard.rank)} ${suitToSymbol(playingCard.suit)}`;
 };
 
 export const stringToPlayingCard = (str: string) => {
@@ -78,21 +129,7 @@ export const rankOptions = Object.values(Rank).map((rank) => ({
 }));
 
 export const suitOptions = Object.values(Suit).map((suit) => {
-  let symbol = '';
-  switch (suit) {
-    case Suit.Spades:
-      symbol = '♠';
-      break;
-    case Suit.Hearts:
-      symbol = '♥';
-      break;
-    case Suit.Diamonds:
-      symbol = '♦';
-      break;
-    case Suit.Clubs:
-      symbol = '♣';
-      break;
-  }
+  const symbol = suitToSymbol(suit);
   return {
     value: suit,
     label: `${suit} ${symbol}`,
