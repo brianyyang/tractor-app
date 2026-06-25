@@ -78,7 +78,7 @@ export const ResumeGame = () => {
       <Title order={4}>{errorMsg}</Title>
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w={246}
         style={submitButtonStyles}
         onClick={() => {

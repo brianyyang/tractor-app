@@ -93,7 +93,7 @@ export const ManagePlayers = () => {
       <Title order={4}>{errorMsg}</Title>
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w='100%'
         style={submitButtonStyles}
         onClick={() => {
@@ -123,7 +123,7 @@ export const ManagePlayers = () => {
       />
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w='100%'
         style={submitButtonStyles}
         onClick={() => {
@@ -145,7 +145,7 @@ export const ManagePlayers = () => {
       />
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w='100%'
         style={submitButtonStyles}
         onClick={() => {

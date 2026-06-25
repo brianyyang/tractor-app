@@ -17,7 +17,7 @@ interface PlayerRoundTableProps {
 const stickyHeaderStyles = {
   textAlign: 'center',
   position: 'sticky',
-  background: '#121212',
+  background: 'var(--background)',
   zIndex: 1,
   left: 0,
 } as CSSProperties;
@@ -54,15 +54,11 @@ const createPlayerRows = (
       {pastRounds.map((round, i) => (
         <Table.Td key={`${player.name}${round.roundId}score`}>
           <PointCircle
-            isDealer={round.dealer === player.name}
+            isDealer={isDealer(round, player)}
             isOnDealersTeam={isOnDealersTeam(round.boatTickets, player)}
-            boatTicket={
-              isOnDealersTeam(round.boatTickets, player)
-                ? round.boatTickets.find(
-                    (ticket) => ticket.player === player.name,
-                  )
-                : undefined
-            }
+            boatTicket={round.boatTickets.find(
+              (ticket) => ticket.player === player.name,
+            )}
           >
             {pointsEarnedInRoundByPlayer.get(`${player.name}${round.roundId}`)}
           </PointCircle>
@@ -85,6 +81,10 @@ const isOnDealersTeam = (boatTickets: BoatTicket[], player: Player) => {
   return boatTickets.some((ticket) => ticket.player === player.name);
 };
 
+const isDealer = (round: Round, player: Player) => {
+  return round.dealer === player.name;
+};
+
 const calculatePointsPerPlayer = (
   pastRounds: Round[],
   players: Player[],
@@ -95,7 +95,10 @@ const calculatePointsPerPlayer = (
     players.forEach((player) => {
       const isFirstRound = round.roundId === 1;
       if (round.pointsScored >= 0) {
-        if (isOnDealersTeam(round.boatTickets, player)) {
+        if (
+          isOnDealersTeam(round.boatTickets, player) ||
+          isDealer(round, player)
+        ) {
           pointsEarnedPerPlayer.set(
             `${player.name}${round.roundId}`,
             isFirstRound
@@ -113,7 +116,10 @@ const calculatePointsPerPlayer = (
           );
         }
       } else {
-        if (isOnDealersTeam(round.boatTickets, player)) {
+        if (
+          isOnDealersTeam(round.boatTickets, player) ||
+          isDealer(round, player)
+        ) {
           pointsEarnedPerPlayer.set(
             `${player.name}${round.roundId}`,
             isFirstRound
@@ -170,7 +176,7 @@ export const PlayerRoundTable = ({
 
   return (
     <div style={scrollingDivStyles}>
-      <Table withColumnBorders className={styles.table} variant="vertical">
+      <Table withColumnBorders className={styles.table} variant='vertical'>
         <Table.Tbody>
           <Table.Tr ta={'center'}>
             <Table.Th style={stickyHeaderStyles}>Round</Table.Th>
@@ -179,7 +185,7 @@ export const PlayerRoundTable = ({
               <Table.Td
                 key={round.roundId}
                 className={styles.editRound}
-                onClick={() => isGameEnded ?? setRoundNumber(index + 1)}
+                onClick={() => setRoundNumber(index + 1)}
               >
                 {index + 1}
               </Table.Td>

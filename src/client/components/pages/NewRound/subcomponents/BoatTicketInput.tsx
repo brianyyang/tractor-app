@@ -23,7 +23,7 @@ export const BoatTicketInput = (props: BoatTicketInputProps) => {
           Dealer Team
         </Box>
         <ActionIcon
-          color='indigo'
+          color='black'
           variant='light'
           ml='1rem'
           onClick={() =>

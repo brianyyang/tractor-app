@@ -139,7 +139,7 @@ export const NewGame = () => {
       />
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w='100%'
         style={submitButtonStyles}
         onClick={() => {

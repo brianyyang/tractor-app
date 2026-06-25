@@ -10,13 +10,13 @@ const selectStyles = {
   input: {
     textAlign: 'left',
     paddingLeft: '12px',
-    color: '#4c6ef5',
-    backgroundColor: 'rgb(23, 28, 41)',
-    borderColor: '#4c6ef5',
+    color: 'var(--foreground)',
+    backgroundColor: 'var(--background-secondary)',
+    borderColor: 'var(--foreground)',
   } as CSSProperties,
   dropdown: {
-    backgroundColor: 'rgb(23, 28, 41)',
-    borderColor: '#4c6ef5',
+    backgroundColor: 'var(--background-secondary)',
+    borderColor: 'var(--foreground)',
   },
 };
 

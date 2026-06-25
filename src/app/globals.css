@@ -1,13 +1,7 @@
 :root {
-  --background: #121212;
-  --foreground: #4c6ef5;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #121212;
-    --foreground: #4c6ef5;
-  }
+  --background: hsl(203, 100%, 68%);
+  --background-secondary: rgb(182, 220, 255);
+  --foreground: #03040c;
 }
 
 html,

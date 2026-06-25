@@ -22,7 +22,7 @@ export const PointCircle = ({
   const boxStyles = {
     border:
       isDealer || isOnDealersTeam
-        ? '2px solid #8ba2ff'
+        ? '2px solid var(--foreground)'
         : '2px solid transparent',
     borderRadius: isDealer ? '10% ' : '50%',
     padding: '10px 20px',
@@ -32,9 +32,12 @@ export const PointCircle = ({
   } as CSSProperties;
 
   return showBoatTicket ? (
-    <div style={boxStyles} onClick={() => setShowBoatTicket(false)}>
+    <div
+      style={{ ...boxStyles, display: 'flex', flexDirection: 'column' }}
+      onClick={() => setShowBoatTicket(false)}
+    >
       <span>{stringToShortString(boatTicket?.card || '')}</span>
-      <span>{boatTicket?.sequence}</span>
+      <span style={{ whiteSpace: 'nowrap' }}>{boatTicket?.sequence} seq</span>
     </div>
   ) : (
     <div

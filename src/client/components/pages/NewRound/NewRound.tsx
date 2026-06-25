@@ -91,7 +91,6 @@ export const NewRound = () => {
   };
 
   const submitButtonStyles = {
-    marginLeft: '1rem',
     marginTop: '2rem',
     pointerEvents: !areFieldsValid(boatTickets, otherTeam, pointsScored, dealer)
       ? 'none'
@@ -170,15 +169,15 @@ export const NewRound = () => {
   };
 
   return (
-    <Stack align="center">
+    <Stack align='center'>
       {gameDeleted ? (
         <DeletedGame />
       ) : showGameDetails ? (
         <>
           <RoundTable gameId={gameId} />
           <Button
-            variant="light"
-            color="indigo"
+            variant='light'
+            color='black'
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(false)}

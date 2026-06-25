@@ -1,6 +1,6 @@
 'use client';
 
-import { Box, Button, Stack } from '@mantine/core';
+import { Button, Stack } from '@mantine/core';
 import { CSSProperties } from 'react';
 
 interface NewRoundButtonsProps {
@@ -14,12 +14,10 @@ interface NewRoundButtonsProps {
 }
 
 const showDetailsButtonStyles = {
-  marginLeft: '1rem',
   marginTop: '1rem',
 };
 
 const deleteGameButtonStyles = {
-  marginLeft: '1rem',
   marginTop: '1rem',
   marginBottom: '2rem',
 };
@@ -39,7 +37,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
     <Stack align='center'>
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w={246}
         style={submitButtonStyles}
         onClick={isEditingRound ? handleEditRound : handleCreateRound}
@@ -48,7 +46,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
       </Button>
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w={246}
         style={showDetailsButtonStyles}
         onClick={() => setShowGameDetails(true)}
@@ -57,7 +55,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
       </Button>
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w={246}
         style={showDetailsButtonStyles}
         onClick={openEnd}
@@ -66,7 +64,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
       </Button>
       <Button
         variant='light'
-        color='indigo'
+        color='black'
         w={246}
         style={deleteGameButtonStyles}
         onClick={openDelete}

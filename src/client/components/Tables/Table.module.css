@@ -1,3 +1,8 @@
+.table {
+  --table-border-color: black;
+  user-select: none;
+}
+
 .table td {
   padding: 0.5rem;
 }
@@ -7,11 +12,11 @@
 }
 
 .editRound:hover {
-  background-color: #3a3a3a;
+  background-color: var(--background-secondary);
   cursor: pointer;
 }
 
 .gameRow:hover {
-  background-color: #3a3a3a;
+  background-color: var(--background-secondary);
   cursor: pointer;
 }
