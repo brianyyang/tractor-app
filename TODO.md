@@ -51,3 +51,10 @@ susan loses 2 points from penny and 1 point from sisi
 - [x] Visual indicator for boat ticket card and sequence
 - [x] Editing rounds
 - [x] Change theme - Background light green - Text black
+
+#### 6/25/2026
+
+- [x] Change theme - Background dark cyan - Text white
+- [x] Add delete button for boat tickets
+- [x] Add button to return to adding new rounds when editing old round
+- [x] Add labels and dividers to boat ticket inputs
