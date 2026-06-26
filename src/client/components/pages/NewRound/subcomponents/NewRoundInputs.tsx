@@ -36,7 +36,7 @@ export const NewRoundInputs = (props: NewRoundInputsProps) => {
     <Box>
       <div
         style={{
-          marginTop: '2rem',
+          marginTop: '1rem',
           marginBottom: '1rem',
           display: 'flex',
           justifyContent: 'space-between',

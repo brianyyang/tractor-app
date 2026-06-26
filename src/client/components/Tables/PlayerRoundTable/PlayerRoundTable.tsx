@@ -185,7 +185,7 @@ export const PlayerRoundTable = ({
               <Table.Td
                 key={round.roundId}
                 className={styles.editRound}
-                onClick={() => setRoundNumber(index + 1)}
+                onClick={() => !isGameEnded && setRoundNumber(index + 1)}
               >
                 {index + 1}
               </Table.Td>

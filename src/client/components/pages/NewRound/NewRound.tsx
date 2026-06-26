@@ -52,6 +52,10 @@ export const NewRound = () => {
     return !loading && !gameDeleted && roundNumber !== rounds.length + 1;
   }, [roundNumber, rounds]);
 
+  const returnToNewRound = () => {
+    setRoundNumber(rounds.length + 1);
+  };
+
   useEffect(() => {
     handleLoadRounds();
   }, [gameId, roundNumber]);
@@ -177,7 +181,7 @@ export const NewRound = () => {
           <RoundTable gameId={gameId} />
           <Button
             variant='light'
-            color='black'
+            color='white'
             w={246}
             style={showDetailsButtonStyles}
             onClick={() => setShowGameDetails(false)}
@@ -209,6 +213,7 @@ export const NewRound = () => {
             isEditingRound={isEditingRound}
             handleEditRound={handleEditRound}
             handleCreateRound={handleCreateRound}
+            handleReturnToNewRound={returnToNewRound}
             setShowGameDetails={setShowGameDetails}
             openEnd={openEnd}
             openDelete={openDelete}

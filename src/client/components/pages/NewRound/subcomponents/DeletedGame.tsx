@@ -15,7 +15,7 @@ export const DeletedGame = () => {
       <Title order={4}>Game deleted successfully!</Title>
       <Button
         variant='light'
-        color='black'
+        color='white'
         w={246}
         style={showDetailsButtonStyles}
         onClick={() => {

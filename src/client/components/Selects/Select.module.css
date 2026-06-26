@@ -5,3 +5,8 @@
 .option:hover {
   background-color: #b3c2ff;
 }
+
+.label {
+  font-size: medium;
+  font-weight: bold;
+}

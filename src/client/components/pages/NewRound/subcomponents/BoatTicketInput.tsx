@@ -5,8 +5,8 @@ import { StyledTextInput } from '@/client/components/TextInputs/StyledTextInput'
 import { useGame } from '@/client/contexts/GameContext';
 import { rankOptions, suitOptions } from '@/types/PlayingCard';
 import { BoatTicket } from '@/types/round';
-import { ActionIcon, Box, Flex, Stack } from '@mantine/core';
-import { IconUsersPlus } from '@tabler/icons-react';
+import { ActionIcon, Box, Divider, Flex, Stack } from '@mantine/core';
+import { IconUsersMinus, IconUsersPlus, IconX } from '@tabler/icons-react';
 import { useMemo } from 'react';
 
 interface BoatTicketInputProps {
@@ -23,9 +23,9 @@ export const BoatTicketInput = (props: BoatTicketInputProps) => {
           Dealer Team
         </Box>
         <ActionIcon
-          color='black'
+          color='white'
           variant='light'
-          ml='1rem'
+          ml='0.5rem'
           onClick={() =>
             setBoatTickets([
               ...boatTickets,
@@ -45,6 +45,9 @@ export const BoatTicketInput = (props: BoatTicketInputProps) => {
               tickets[index] = updatedTicket;
               setBoatTickets(tickets);
             }}
+            onRemove={() => {
+              setBoatTickets(boatTickets.toSpliced(index, 1));
+            }}
           />
         </Stack>
       ))}
@@ -55,9 +58,14 @@ export const BoatTicketInput = (props: BoatTicketInputProps) => {
 interface SingleBoatTicketProps {
   boatTicket: BoatTicket;
   onChange: (updated: BoatTicket) => void;
+  onRemove: () => void;
 }
 
-const SingleBoatTicket = ({ boatTicket, onChange }: SingleBoatTicketProps) => {
+const SingleBoatTicket = ({
+  boatTicket,
+  onChange,
+  onRemove,
+}: SingleBoatTicketProps) => {
   const { players } = useGame();
   const cardSplit: string[] = useMemo(() => {
     return boatTicket.card.split(' ');
@@ -67,34 +75,49 @@ const SingleBoatTicket = ({ boatTicket, onChange }: SingleBoatTicketProps) => {
     onChange({ ...boatTicket, ...patch });
 
   return (
-    <Stack pt='1rem'>
-      <StyledSelect
-        data={players.map((player) => player.name)}
-        value={boatTicket.player}
-        w={130}
-        onChange={(value) => update({ player: value || '' })}
-      />
-      <Flex align='center' gap='md'>
+    <Stack>
+      <Divider mt='1rem' />
+      <Flex justify='space-between'>
+        <StyledSelect
+          data={players.map((player) => player.name)}
+          value={boatTicket.player}
+          w={130}
+          onChange={(value) => update({ player: value || '' })}
+          label='Player'
+        />
+        <ActionIcon
+          color='white'
+          variant='light'
+          mt='0.5rem'
+          onClick={onRemove}
+        >
+          <IconX size={24} />
+        </ActionIcon>
+      </Flex>
+      <Flex align='flex-end' gap='md'>
         <StyledSelect
           data={rankOptions}
           value={cardSplit.length === 3 ? cardSplit[0] : null}
           onChange={(value) => update({ card: `${value} of ${cardSplit[2]}` })}
           w={80}
           searchable
+          label='Card'
         />
-        of
+        <span style={{ paddingBottom: '0.5rem' }}>of</span>
         <StyledSelect
           data={suitOptions}
           value={cardSplit.length === 3 ? cardSplit[2] : null}
           onChange={(value) => update({ card: `${cardSplit[0]} of ${value}` })}
           w={120}
           searchable
+          label='Suit'
         />
       </Flex>
       <StyledTextInput
         value={boatTicket.sequence}
         onChange={(event) => update({ sequence: event.target.value || '' })}
         w={80}
+        label='Sequence'
       />
     </Stack>
   );

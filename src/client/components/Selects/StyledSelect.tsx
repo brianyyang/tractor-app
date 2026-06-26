@@ -26,8 +26,7 @@ export const StyledSelect = ({
 }: StyledSelectProps) => {
   return (
     <Select
-      className={styles.select}
-      classNames={{ option: styles.option }}
+      classNames={{ option: styles.option, label: styles.label }}
       style={styleOverrides}
       styles={selectStyles}
       rightSection={<IconChevronDown size={16} />}

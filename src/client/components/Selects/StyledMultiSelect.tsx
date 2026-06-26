@@ -31,6 +31,7 @@ export const StyledMultiSelect = ({
     pill: {
       paddingLeft: '8px',
       backgroundColor: 'var(--background)',
+      color: 'var(--foreground)',
       paddingRight: disabled ? '8px' : '0px',
     },
     pillsList: {
@@ -41,9 +42,9 @@ export const StyledMultiSelect = ({
 
   return (
     <MultiSelect
-      className={styles.select}
       classNames={{
         option: styles.option,
+        label: styles.label,
       }}
       style={styleOverrides}
       styles={multiSelectStyles}

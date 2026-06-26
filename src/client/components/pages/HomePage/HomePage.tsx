@@ -22,7 +22,7 @@ export const HomePage = () => {
               <Button
                 className={styles.button}
                 variant='light'
-                color='black'
+                color='white'
                 onClick={() => setGameState(GameState.NewGame)}
               >
                 New Game
@@ -30,7 +30,7 @@ export const HomePage = () => {
               <Button
                 className={styles.button}
                 variant='light'
-                color='black'
+                color='white'
                 onClick={() => setGameState(GameState.ResumeGame)}
               >
                 Resume Game
@@ -40,7 +40,7 @@ export const HomePage = () => {
               className={styles.button}
               style={{ width: '50%' }}
               variant='light'
-              color='black'
+              color='white'
               onClick={() => setGameState(GameState.GameHistory)}
             >
               Past Games
@@ -49,7 +49,7 @@ export const HomePage = () => {
               className={styles.button}
               style={{ width: '60%' }}
               variant='light'
-              color='black'
+              color='white'
               onClick={() => setGameState(GameState.ManagePlayers)}
             >
               Manage Players

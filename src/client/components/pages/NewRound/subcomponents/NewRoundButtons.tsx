@@ -7,6 +7,7 @@ interface NewRoundButtonsProps {
   isEditingRound: boolean;
   handleEditRound: () => void;
   handleCreateRound: () => void;
+  handleReturnToNewRound: () => void;
   setShowGameDetails: (showGameDetails: boolean) => void;
   openEnd: () => void;
   openDelete: () => void;
@@ -27,6 +28,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
     isEditingRound,
     handleEditRound,
     handleCreateRound,
+    handleReturnToNewRound,
     setShowGameDetails,
     openEnd,
     openDelete,
@@ -37,16 +39,27 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
     <Stack align='center'>
       <Button
         variant='light'
-        color='black'
+        color='white'
         w={246}
         style={submitButtonStyles}
         onClick={isEditingRound ? handleEditRound : handleCreateRound}
       >
         {isEditingRound ? 'Edit Round' : 'Add Round'}
       </Button>
+      {isEditingRound && (
+        <Button
+          variant='light'
+          color='white'
+          w={246}
+          style={showDetailsButtonStyles}
+          onClick={handleReturnToNewRound}
+        >
+          Return to New Round
+        </Button>
+      )}
       <Button
         variant='light'
-        color='black'
+        color='white'
         w={246}
         style={showDetailsButtonStyles}
         onClick={() => setShowGameDetails(true)}
@@ -55,7 +68,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
       </Button>
       <Button
         variant='light'
-        color='black'
+        color='white'
         w={246}
         style={showDetailsButtonStyles}
         onClick={openEnd}
@@ -64,7 +77,7 @@ export const NewRoundButtons = (props: NewRoundButtonsProps) => {
       </Button>
       <Button
         variant='light'
-        color='black'
+        color='white'
         w={246}
         style={deleteGameButtonStyles}
         onClick={openDelete}
